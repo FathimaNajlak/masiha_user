@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:masiha_user/screens/home.dart';
 import 'package:masiha_user/screens/splash_screen.dart';
 
 void main() async {
@@ -14,12 +15,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false, // Disable debug banner
-
+      debugShowCheckedModeBanner: false,
+      routes: {
+        '/home': (context) => const HomePage(),
+      },
       theme: ThemeData(
-        primarySwatch: Colors.blue, // Define your theme colors
+        primarySwatch: Colors.blue,
       ),
-      home: const SplashScreen(), // Set SplashScreen as the home
+      home: const SplashScreen(),
     );
   }
 }
