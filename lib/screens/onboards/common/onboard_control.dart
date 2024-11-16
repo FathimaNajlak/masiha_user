@@ -54,7 +54,7 @@ class OnboardingControls extends StatelessWidget {
               onPressed: () {
                 final provider = context.read<OnboardingProvider>();
                 if (isLastPage) {
-                  Navigator.pushReplacementNamed(context, '/home');
+                  Navigator.pushReplacementNamed(context, '/letin');
                 } else {
                   provider.nextPage();
                   // Check if section changed after nextPage
