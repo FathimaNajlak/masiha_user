@@ -1,6 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:masiha_user/screens/onboard1.dart';
+import 'package:masiha_user/screens/home/home.dart';
+import 'package:masiha_user/screens/onboards/onboard1/onboard1.dart';
+import 'package:masiha_user/screens/onboards/onboard2/onboard2.dart';
+import 'package:masiha_user/screens/onboards/onboard3/onboard3.dart';
 import 'package:masiha_user/screens/splash_screen.dart';
 
 void main() async {
@@ -17,7 +20,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
-        '/onboeard1': (context) => const Onboard1(),
+        '/onboard1': (context) => const Onboarding1(),
+        '/onboard2': (context) => const Onboarding2(),
+        '/onboard3': (context) => const Onboarding3(),
+        '/home': (context) => const HomeScreen(),
       },
       theme: ThemeData(
         primarySwatch: Colors.blue,
