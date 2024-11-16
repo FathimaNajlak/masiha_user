@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:masiha_user/widgets/Loading_dots_painter.dart';
+import 'package:masiha_user/widgets/splash/loading_animation.dart';
+import 'package:masiha_user/widgets/splash/logo.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -21,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen>
     )..repeat();
 
     Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pushReplacementNamed(context, '/onboard1');
     });
   }
 
@@ -39,30 +40,11 @@ class _SplashScreenState extends State<SplashScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Logo
-            Column(
-              children: [
-                SizedBox(
-                  width: 400,
-                  child: Image.asset(
-                    'assets/images/logo.png',
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ],
+            const Column(
+              children: [LogoWidget(imagepath: 'assets/images/logo.png')],
             ),
             const SizedBox(height: 50),
-
-            RotationTransition(
-              turns: _controller,
-              child: SizedBox(
-                width: 40,
-                height: 40,
-                child: CustomPaint(
-                  painter: LoadingDotsPainter(),
-                ),
-              ),
-            ),
+            LoadingAnimation(controller: _controller),
           ],
         ),
       ),
