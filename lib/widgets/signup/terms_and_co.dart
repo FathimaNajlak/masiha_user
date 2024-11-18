@@ -13,7 +13,11 @@ class TermsAndCo extends StatelessWidget {
           children: [
             Checkbox(
               value: provider.termsAccepted,
-              onChanged: (value) => provider.toggleTerms(value!),
+              onChanged: (value) {
+                if (value != null) {
+                  provider.toggleTerms(value);
+                }
+              },
               activeColor: const Color(0xFF78A6B8),
             ),
             Expanded(

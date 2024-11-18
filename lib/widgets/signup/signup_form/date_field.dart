@@ -16,7 +16,9 @@ class DateField extends StatelessWidget {
           context: context,
           initialDate: DateTime.now(),
           firstDate: DateTime(1900),
-          lastDate: DateTime.now(),
+          lastDate: DateTime(2100),
+          errorInvalidText:
+              provider.selectedDate == null ? 'Please select a date' : null,
         );
         if (picked != null) {
           provider.setDate(picked);

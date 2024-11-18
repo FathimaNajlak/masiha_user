@@ -10,34 +10,82 @@ import 'package:masiha_user/widgets/signup/terms_and_co.dart';
 import 'package:provider/provider.dart';
 
 class SignupScreen extends StatelessWidget {
-  const SignupScreen({super.key});
+  SignupScreen({super.key});
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => SignupProvider(),
-      child: const Scaffold(
+      child: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(10.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Header(),
-                SizedBox(height: 15),
-                Center(child: ProfileImagePicker()),
-                SizedBox(height: 15),
-                SignUpForm(),
-                SizedBox(height: 15),
-                TermsAndCo(),
-                SizedBox(height: 15),
-                NextButton(),
-                SizedBox(height: 15),
-                LoginWith(),
-                // const SizedBox(height: 5.0),
-                Login(),
+                const Header(),
+                const SizedBox(height: 15),
+                const Center(child: ProfileImagePicker()),
+                const SizedBox(height: 15),
+                SignUpForm(formKey: _formKey),
+                const SizedBox(height: 15),
+                Consumer<SignupProvider>(
+                  builder: (context, provider, _) {
+                    return FormField<bool>(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) {
+                        if (!provider.termsAccepted) {
+                          return 'Please accept the terms and conditions';
+                        }
+                        return null;
+                      },
+                      builder: (FormFieldState<bool> state) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const TermsAndCo(),
+                            if (state.hasError)
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 8, left: 12),
+                                child: Text(
+                                  state.errorText!,
+                                  style: TextStyle(
+                                    color: Theme.of(context).colorScheme.error,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
+                const SizedBox(height: 15),
+                NextButton(
+                  onPressed: () {
+                    if (_formKey.currentState?.validate() ?? false) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text('Form is valid! Proceeding...')),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content:
+                                Text('Please fill in all fields correctly')),
+                      );
+                    }
+                  },
+                ),
+                const SizedBox(height: 15),
+                const LoginWith(),
+                const Login(),
               ],
             ),
           ),
