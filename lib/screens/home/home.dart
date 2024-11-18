@@ -11,7 +11,7 @@ class HomeScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back),
           color: Colors.black,
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushReplacementNamed(context, '/login');
           },
         ),
         title: const Text('Home Screen'),
