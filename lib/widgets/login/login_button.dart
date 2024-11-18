@@ -3,7 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:masiha_user/consts/colors.dart';
 
 class LoginButton extends StatelessWidget {
-  const LoginButton({super.key});
+  final GlobalKey<FormState> formKey;
+
+  const LoginButton({super.key, required this.formKey});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +13,19 @@ class LoginButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
-          Navigator.pushReplacementNamed(context, '/home');
+          FocusScope.of(context).unfocus();
+
+          if (formKey.currentState!.validate()) {
+            print("Form is valid");
+            // Navigator.pushReplacementNamed(context, '/home');
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Please fix the errors in the form'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.darkcolor,
@@ -23,7 +37,10 @@ class LoginButton extends StatelessWidget {
         child: Text(
           'Log In',
           style: GoogleFonts.roboto(
-              fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white),
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+          ),
         ),
       ),
     );

@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         '/onboard2': (context) => const Onboarding2(),
         '/onboard3': (context) => const Onboarding3(),
         '/letin': (context) => const LetinPage(),
-        '/login': (context) => const LoginScreen(),
+        '/login': (context) => LoginScreen(),
         '/signup': (context) => const SignupScreen(),
         '/home': (context) => const HomeScreen(),
       },
