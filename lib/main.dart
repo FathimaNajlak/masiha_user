@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         '/onboard3': (context) => const Onboarding3(),
         '/letin': (context) => const LetinPage(),
         '/login': (context) => LoginScreen(),
-        '/signup': (context) => const SignupScreen(),
+        '/signup': (context) => SignupScreen(),
         '/home': (context) => const HomeScreen(),
       },
       theme: ThemeData(
