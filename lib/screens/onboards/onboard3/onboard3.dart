@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:masiha_user/providers/onboardings/onboarding_provider.dart';
+import 'package:masiha_user/providers/onboarding_provider.dart';
 import 'package:masiha_user/screens/onboards/onboard3/onboard3_view.dart';
 import 'package:provider/provider.dart';
 

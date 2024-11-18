@@ -66,7 +66,9 @@ class LetinPage extends StatelessWidget {
 
                 // Sign Up Button
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(context, '/signup');
+                  },
                   style: TextButton.styleFrom(
                     foregroundColor: const Color(0xFF7AB8D3),
                   ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:masiha_user/models/onboardings/onboarding1_model.dart';
-import 'package:masiha_user/providers/onboardings/onboarding_provider.dart';
+import 'package:masiha_user/providers/onboarding_provider.dart';
 import 'package:masiha_user/screens/onboards/common/onboard_control.dart';
 import 'package:masiha_user/screens/onboards/common/onboard_page.dart';
 import 'package:provider/provider.dart';

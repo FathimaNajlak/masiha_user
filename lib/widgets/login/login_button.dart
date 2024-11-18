@@ -10,7 +10,9 @@ class LoginButton extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushReplacementNamed(context, '/home');
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.darkcolor,
           padding: const EdgeInsets.symmetric(vertical: 16),
