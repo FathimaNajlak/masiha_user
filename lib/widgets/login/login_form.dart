@@ -12,7 +12,7 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  bool isPasswordVisible = false; // State to manage password visibility
+  bool isPasswordVisible = false;
 
   String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
