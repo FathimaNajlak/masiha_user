@@ -13,7 +13,6 @@ class ProfileImagePicker extends StatefulWidget {
 class _ProfileImagePickerState extends State<ProfileImagePicker> {
   File? _profileImage;
 
-  // Function to pick an image from camera or gallery
   Future<void> _pickImage(ImageSource source) async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: source);
@@ -29,7 +28,6 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
     return Center(
       child: Stack(
         children: [
-          // Circle Avatar to display the profile image or default icon
           Container(
             width: 100,
             height: 100,
@@ -51,13 +49,11 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
                   )
                 : null,
           ),
-          // Positioned Camera Icon
           Positioned(
             right: 0,
             bottom: 0,
             child: GestureDetector(
               onTap: () async {
-                // Show dialog to select camera or gallery
                 showModalBottomSheet(
                   context: context,
                   builder: (context) => SafeArea(

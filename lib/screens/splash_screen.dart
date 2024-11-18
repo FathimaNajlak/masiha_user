@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:masiha_user/widgets/splash/loading_animation.dart';
 import 'package:masiha_user/widgets/splash/logo.dart';
 
