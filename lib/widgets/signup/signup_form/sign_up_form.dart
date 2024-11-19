@@ -39,6 +39,7 @@ class SignUpForm extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               TextFormField(
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   labelText: 'Age',
                   labelStyle: const TextStyle(color: Colors.grey),
@@ -49,9 +50,18 @@ class SignUpForm extends StatelessWidget {
                     borderSide: BorderSide(color: Color(0xFF78A6B8)),
                   ),
                 ),
+                // validator: (value) {
+                //   if (value == null || value.isEmpty) {
+                //     return 'Please enter your age';
+                //   }
+                //   return null;
+                // },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your age';
+                  }
+                  if (!RegExp(r'^\d{2}$').hasMatch(value)) {
+                    return 'Please enter a valid age';
                   }
                   return null;
                 },
@@ -86,6 +96,7 @@ class SignUpForm extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               TextFormField(
+                keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   labelText: 'Email',
                   labelStyle: const TextStyle(color: Colors.grey),
