@@ -15,12 +15,13 @@ class CreatePasswordButton extends StatelessWidget {
           : () async {
               if (await provider.createNewPassword()) {
                 // Navigate to next screen or show success message
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Password created successfully!'),
-                    backgroundColor: Colors.green,
-                  ),
-                );
+                // ScaffoldMessenger.of(context).showSnackBar(
+                //   const SnackBar(
+                //     content: Text('Password created successfully!'),
+                //     backgroundColor: Colors.green,
+                //   ),
+                // );
+                Navigator.pushNamed(context, '/allset');
               }
             },
       style: ElevatedButton.styleFrom(

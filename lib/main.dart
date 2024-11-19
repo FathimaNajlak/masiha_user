@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:masiha_user/screens/home/home.dart';
+import 'package:masiha_user/screens/login_signup/all_set.dart';
 import 'package:masiha_user/screens/login_signup/forgot_password.dart';
 import 'package:masiha_user/screens/login_signup/let_in.dart';
 import 'package:masiha_user/screens/login_signup/login_screen.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginScreen(),
         '/signup': (context) => SignupScreen(),
         '/forgotpass': (context) => const ForgotPasswordScreen(),
+        '/allset': (context) => const AllSetScreen(),
         '/home': (context) => const HomeScreen(),
       },
       theme: ThemeData(
