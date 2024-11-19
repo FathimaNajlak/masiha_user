@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:masiha_user/providers/signup_provider.dart';
 import 'package:masiha_user/widgets/login/login_with.dart';
-import 'package:masiha_user/widgets/login/pick_image.dart';
+import 'package:masiha_user/widgets/signup/pick_image.dart';
 import 'package:masiha_user/widgets/signup/header.dart';
 import 'package:masiha_user/widgets/signup/login.dart';
 import 'package:masiha_user/widgets/signup/next_button.dart';
@@ -47,7 +47,7 @@ class SignupScreen extends StatelessWidget {
                                 provider
                                     .setSelectedImage(image); // Update provider
                                 state.didChange(
-                                    'imageSelected'); // Notify form field of change
+                                    'imageSelected'); // Notify form field of changeA
                               },
                             ),
                             if (state.hasError)

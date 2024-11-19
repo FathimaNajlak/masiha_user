@@ -113,6 +113,20 @@ class _LoginFormState extends State<LoginForm> {
             ),
             validator: validatePassword,
           ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/forgotpass');
+              },
+              child: const Text(
+                'Forgot Password?',
+                style: TextStyle(
+                  color: Color(0xFF78A6B8),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
