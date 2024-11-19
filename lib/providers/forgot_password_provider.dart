@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:masiha_user/screens/login_signup/set_password.dart';
 
 class ForgotPasswordProvider extends ChangeNotifier {
   String _email = '';
@@ -15,7 +15,7 @@ class ForgotPasswordProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> resetPassword() async {
+  Future<void> resetPassword(BuildContext context) async {
     if (_email.isEmpty) {
       _errorMessage = 'Please enter your email';
       notifyListeners();
@@ -32,6 +32,15 @@ class ForgotPasswordProvider extends ChangeNotifier {
 
       _isLoading = false;
       notifyListeners();
+
+      // Navigate to another page
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              const SetPasswordScreen(), // Replace with your target page
+        ),
+      );
     } catch (e) {
       _isLoading = false;
       _errorMessage = 'An error occurred. Please try again.';

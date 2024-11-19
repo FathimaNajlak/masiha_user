@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:masiha_user/providers/forgot_password_provider.dart';
+import 'package:masiha_user/widgets/login/forgot_password/button.dart';
+import 'package:masiha_user/widgets/login/forgot_password/email_input.dart';
+import 'package:masiha_user/widgets/login/forgot_password/illusration.dart';
 import 'package:provider/provider.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
@@ -9,9 +12,21 @@ class ForgotPasswordScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => ForgotPasswordProvider(),
-      child: const Scaffold(
+      child: Scaffold(
         backgroundColor: Colors.white,
-        body: SafeArea(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          centerTitle: true,
+          iconTheme: const IconThemeData(
+            color: Colors.black,
+          ),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
+          ),
+        ),
+        body: const SafeArea(
           child: SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.all(24.0),
@@ -35,86 +50,17 @@ class ForgotPasswordScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 32),
-                  _EmailInput(),
+                  EmailInput(),
                   SizedBox(height: 24),
-                  _IllustrationWidget(),
+                  IllustrationWidget(),
                   SizedBox(height: 32),
-                  _ContinueButton(),
+                  Button(),
                 ],
               ),
             ),
           ),
         ),
       ),
-    );
-  }
-}
-
-class _EmailInput extends StatelessWidget {
-  const _EmailInput({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final provider = context.watch<ForgotPasswordProvider>();
-
-    return TextField(
-      onChanged: provider.setEmail,
-      decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.email_outlined),
-        hintText: 'Email',
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
-        ),
-        filled: true,
-        fillColor: Colors.grey[100],
-        errorText: provider.errorMessage,
-      ),
-      keyboardType: TextInputType.emailAddress,
-    );
-  }
-}
-
-class _IllustrationWidget extends StatelessWidget {
-  const _IllustrationWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Image.asset(
-        'assets/images/forgot_password.png',
-        height: 200,
-      ),
-    );
-  }
-}
-
-class _ContinueButton extends StatelessWidget {
-  const _ContinueButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final provider = context.watch<ForgotPasswordProvider>();
-
-    return ElevatedButton(
-      onPressed: provider.isLoading ? null : provider.resetPassword,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF7FBCD2),
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-      child: provider.isLoading
-          ? const CircularProgressIndicator(color: Colors.white)
-          : const Text(
-              'Continue',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
     );
   }
 }
