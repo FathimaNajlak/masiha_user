@@ -29,7 +29,44 @@ class SignupScreen extends StatelessWidget {
               children: [
                 const Header(),
                 const SizedBox(height: 15),
-                const Center(child: ProfileImagePicker()),
+                Consumer<SignupProvider>(
+                  builder: (context, provider, _) {
+                    return FormField<String>(
+                      validator: (value) {
+                        if (provider.selectedImage == null) {
+                          return 'Please select a profile image';
+                        }
+                        return null;
+                      },
+                      builder: (FormFieldState<String> state) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            ProfileImagePicker(
+                              onImageSelected: (image) {
+                                provider
+                                    .setSelectedImage(image); // Update provider
+                                state.didChange(
+                                    'imageSelected'); // Notify form field of change
+                              },
+                            ),
+                            if (state.hasError)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Text(
+                                  state.errorText!,
+                                  style: TextStyle(
+                                    color: Theme.of(context).colorScheme.error,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
                 const SizedBox(height: 15),
                 SignUpForm(formKey: _formKey),
                 const SizedBox(height: 15),

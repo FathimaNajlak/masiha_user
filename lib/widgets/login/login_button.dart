@@ -17,7 +17,7 @@ class LoginButton extends StatelessWidget {
 
           if (formKey.currentState!.validate()) {
             print("Form is valid");
-            // Navigator.pushReplacementNamed(context, '/home');
+            Navigator.pushReplacementNamed(context, '/home');
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(

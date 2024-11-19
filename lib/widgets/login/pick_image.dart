@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileImagePicker extends StatefulWidget {
-  const ProfileImagePicker({super.key});
+  final Function(File)? onImageSelected; // Add callback
+
+  const ProfileImagePicker({super.key, this.onImageSelected});
 
   @override
   _ProfileImagePickerState createState() => _ProfileImagePickerState();
@@ -18,9 +20,15 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
     final pickedFile = await picker.pickImage(source: source);
 
     if (pickedFile != null) {
+      final image = File(pickedFile.path);
       setState(() {
-        _profileImage = File(pickedFile.path);
+        _profileImage = image;
       });
+
+      // Notify parent widget via callback
+      if (widget.onImageSelected != null) {
+        widget.onImageSelected!(image);
+      }
     }
   }
 
