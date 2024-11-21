@@ -1,23 +1,41 @@
+// import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:masiha_user/consts/colors.dart';
+import 'package:masiha_user/services/firebase_auth_service.dart';
 
 class LoginButton extends StatelessWidget {
   final GlobalKey<FormState> formKey;
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
 
-  const LoginButton({super.key, required this.formKey});
+  const LoginButton({
+    super.key,
+    required this.formKey,
+    required this.emailController,
+    required this.passwordController,
+  });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
           FocusScope.of(context).unfocus();
 
           if (formKey.currentState!.validate()) {
-            print("Form is valid");
-            Navigator.pushReplacementNamed(context, '/home');
+            final FirebaseAuthService authService = FirebaseAuthService();
+
+            final user = await authService.signInWithEmailAndPassword(
+              context: context,
+              email: emailController.text.trim(),
+              password: passwordController.text.trim(),
+            );
+
+            if (user != null) {
+              Navigator.pushReplacementNamed(context, '/home');
+            }
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(

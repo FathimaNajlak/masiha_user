@@ -13,7 +13,9 @@ class Login extends StatelessWidget {
           style: TextStyle(color: Colors.grey),
         ),
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, '/login');
+          },
           child: const Text(
             'Log in',
             style: TextStyle(

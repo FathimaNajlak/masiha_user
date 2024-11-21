@@ -50,21 +50,21 @@ class SignUpForm extends StatelessWidget {
                     borderSide: BorderSide(color: Color(0xFF78A6B8)),
                   ),
                 ),
-                // validator: (value) {
-                //   if (value == null || value.isEmpty) {
-                //     return 'Please enter your age';
-                //   }
-                //   return null;
-                // },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your age';
                   }
-                  if (!RegExp(r'^\d{2}$').hasMatch(value)) {
-                    return 'Please enter a valid age';
-                  }
                   return null;
                 },
+                // validator: (value) {
+                //   if (value == null || value.isEmpty) {
+                //     return 'Please enter your age';
+                //   }
+                //   if (!RegExp(r'^\d{1-2}$').hasMatch(value)) {
+                //     return 'Please enter a valid age';
+                //   }
+                //   return null;
+                // },
               ),
               const SizedBox(height: 16),
               FormField<DateTime>(

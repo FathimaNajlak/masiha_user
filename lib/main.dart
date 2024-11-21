@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:masiha_user/firebase_options.dart';
+import 'package:masiha_user/providers/login_screen_provider.dart';
 import 'package:masiha_user/screens/home/home.dart';
 import 'package:masiha_user/screens/login_signup/all_set.dart';
 import 'package:masiha_user/screens/login_signup/forgot_password.dart';
@@ -10,11 +12,21 @@ import 'package:masiha_user/screens/onboards/onboard1/onboard1.dart';
 import 'package:masiha_user/screens/onboards/onboard2/onboard2.dart';
 import 'package:masiha_user/screens/onboards/onboard3/onboard3.dart';
 import 'package:masiha_user/screens/splash_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(const MyApp());
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LoginProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
