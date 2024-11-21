@@ -10,6 +10,8 @@ class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +44,17 @@ class LoginScreen extends StatelessWidget {
             padding: const EdgeInsets.all(24.0),
             child: Column(
               children: [
-                LoginForm(formKey: _formKey),
+                LoginForm(
+                  formKey: _formKey,
+                  emailController: _emailController,
+                  passwordController: _passwordController,
+                ),
                 const SizedBox(height: 24),
-                LoginButton(formKey: _formKey),
+                LoginButton(
+                  formKey: _formKey,
+                  emailController: _emailController,
+                  passwordController: _passwordController,
+                ),
                 const SizedBox(height: 16),
                 const LoginWith(),
                 const SizedBox(height: 16),
