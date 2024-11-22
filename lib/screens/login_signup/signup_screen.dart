@@ -111,6 +111,7 @@ class SignupScreen extends StatelessWidget {
                         const SnackBar(
                             content: Text('Form is valid! Proceeding...')),
                       );
+                      Navigator.pushNamed(context, '/home');
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

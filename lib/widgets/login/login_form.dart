@@ -155,14 +155,13 @@ class _LoginFormState extends State<LoginForm> {
 
   String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please enter an email or mobile number';
+      return 'Please enter an email';
     }
 
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-    final phoneRegex = RegExp(r'^\d{10}$');
 
-    if (!emailRegex.hasMatch(value) && !phoneRegex.hasMatch(value)) {
-      return 'Please enter a valid email or 10-digit mobile number';
+    if (!emailRegex.hasMatch(value)) {
+      return 'Please enter a valid email';
     }
     return null;
   }
@@ -171,8 +170,17 @@ class _LoginFormState extends State<LoginForm> {
     if (value == null || value.isEmpty) {
       return 'Please enter a password';
     }
-    if (value.length < 6) {
-      return 'Password must be at least 6 characters long';
+    if (value.length < 8) {
+      return 'Password must be at least 8 characters';
+    }
+    if (!value.contains(RegExp(r'[A-Z]'))) {
+      return 'Password must contain at least one uppercase letter';
+    }
+    if (!value.contains(RegExp(r'[0-9]'))) {
+      return 'Password must contain at least one number';
+    }
+    if (!value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+      return 'Password must contain at least one special character';
     }
     return null;
   }
