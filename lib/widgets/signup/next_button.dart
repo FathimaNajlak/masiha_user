@@ -11,9 +11,6 @@ class NextButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: onPressed,
-        // () {
-        //   Navigator.pushNamed(context, '/home');
-        // },
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF78A6B8),
           padding: const EdgeInsets.symmetric(vertical: 16),

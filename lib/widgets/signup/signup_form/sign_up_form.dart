@@ -30,6 +30,15 @@ class SignUpForm extends StatelessWidget {
                     borderSide: BorderSide(color: Color(0xFF78A6B8)),
                   ),
                 ),
+                // onChanged: (value) =>
+                //     Provider.of<SignupProvider>(context, listen: false)
+                //         .setAge(value),
+                // validator: (value) {
+                //   if (value == null || value.isEmpty) {
+                //     return 'Please enter your age';
+                //   }
+                //   return null;
+                // },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your full name';
@@ -50,6 +59,15 @@ class SignUpForm extends StatelessWidget {
                     borderSide: BorderSide(color: Color(0xFF78A6B8)),
                   ),
                 ),
+                // onChanged: (value) =>
+                //     Provider.of<SignupProvider>(context, listen: false)
+                //         .setAge(value),
+                // validator: (value) {
+                //   if (value == null || value.isEmpty) {
+                //     return 'Please enter your age';
+                //   }
+                //   return null;
+                // },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your age';
@@ -107,6 +125,19 @@ class SignUpForm extends StatelessWidget {
                     borderSide: BorderSide(color: Color(0xFF78A6B8)),
                   ),
                 ),
+                // onChanged: (value) =>
+                //     Provider.of<SignupProvider>(context, listen: false)
+                //         .setEmail(value),
+                // validator: (value) {
+                //   if (value == null || value.isEmpty) {
+                //     return 'Please enter your email';
+                //   }
+                //   if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                //       .hasMatch(value)) {
+                //     return 'Please enter a valid email';
+                //   }
+                //   return null;
+                // },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your email';
