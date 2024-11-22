@@ -111,7 +111,7 @@ class SignupScreen extends StatelessWidget {
                         const SnackBar(
                             content: Text('Form is valid! Proceeding...')),
                       );
-                      Navigator.pushNamed(context, '/home');
+                      Navigator.pushNamed(context, '/setpass');
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -121,6 +121,34 @@ class SignupScreen extends StatelessWidget {
                     }
                   },
                 ),
+                // NextButton(
+                //   onPressed: () async {
+                //     if (_formKey.currentState?.validate() ?? false) {
+                //       try {
+                //         final provider =
+                //             Provider.of<SignupProvider>(context, listen: false);
+                //         await provider.signUp(
+                //             'temporary-password'); // You should collect password from user
+
+                //         ScaffoldMessenger.of(context).showSnackBar(
+                //           const SnackBar(content: Text('Sign up successful!')),
+                //         );
+                //         Navigator.pushNamed(context, '/setpass');
+                //       } catch (e) {
+                //         ScaffoldMessenger.of(context).showSnackBar(
+                //           SnackBar(content: Text('Error: ${e.toString()}')),
+                //         );
+                //       }
+                //     } else {
+                //       ScaffoldMessenger.of(context).showSnackBar(
+                //         const SnackBar(
+                //             content:
+                //                 Text('Please fill in all fields correctly')),
+                //       );
+                //     }
+                //   },
+                // ),
+
                 const SizedBox(height: 15),
                 const LoginWith(),
                 const Login(),

@@ -12,6 +12,7 @@ import 'package:masiha_user/screens/login_signup/all_set.dart';
 import 'package:masiha_user/screens/login_signup/forgot_password.dart';
 import 'package:masiha_user/screens/login_signup/let_in.dart';
 import 'package:masiha_user/screens/login_signup/login_screen.dart';
+import 'package:masiha_user/screens/login_signup/set_password.dart';
 import 'package:masiha_user/screens/login_signup/signup_screen.dart';
 import 'package:masiha_user/screens/onboards/onboard1/onboard1.dart';
 import 'package:masiha_user/screens/onboards/onboard2/onboard2.dart';
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
         '/forgotpass': (context) => const ForgotPasswordScreen(),
         '/allset': (context) => const AllSetScreen(),
         '/home': (context) => const HomeScreen(),
+        '/setpass': (context) => const SetPasswordScreen(),
       },
       theme: ThemeData(
         primarySwatch: Colors.blue,
