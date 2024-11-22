@@ -15,7 +15,7 @@ class OnboardingProvider extends ChangeNotifier {
 
   void setSection(int section) {
     _currentSection = section;
-    _currentPage = 0; // Reset page when changing sections
+    _currentPage = 0;
     notifyListeners();
   }
 
@@ -29,7 +29,6 @@ class OnboardingProvider extends ChangeNotifier {
     if (_currentPage < maxPages - 1) {
       _currentPage++;
     } else {
-      // Move to next section if available
       if (_currentSection < 3) {
         _currentSection++;
         _currentPage = 0;
@@ -42,7 +41,6 @@ class OnboardingProvider extends ChangeNotifier {
     if (_currentPage > 0) {
       _currentPage--;
     } else {
-      // Move to previous section if available
       if (_currentSection > 1) {
         _currentSection--;
         _currentPage = _currentSection == 1
