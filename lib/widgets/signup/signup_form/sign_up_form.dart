@@ -7,15 +7,14 @@ import 'package:provider/provider.dart';
 class SignUpForm extends StatelessWidget {
   final GlobalKey<FormState> formKey;
 
-  const SignUpForm(
-      {super.key, required this.formKey}); // Use the passed formKey
+  const SignUpForm({super.key, required this.formKey});
 
   @override
   Widget build(BuildContext context) {
     return Consumer<SignupProvider>(
       builder: (context, provider, _) {
         return Form(
-          key: formKey, // Use formKey here
+          key: formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -30,15 +29,9 @@ class SignUpForm extends StatelessWidget {
                     borderSide: BorderSide(color: Color(0xFF78A6B8)),
                   ),
                 ),
-                // onChanged: (value) =>
-                //     Provider.of<SignupProvider>(context, listen: false)
-                //         .setAge(value),
-                // validator: (value) {
-                //   if (value == null || value.isEmpty) {
-                //     return 'Please enter your age';
-                //   }
-                //   return null;
-                // },
+                onChanged: (value) {
+                  provider.setFullName(value);
+                },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your full name';
@@ -59,59 +52,20 @@ class SignUpForm extends StatelessWidget {
                     borderSide: BorderSide(color: Color(0xFF78A6B8)),
                   ),
                 ),
-                // onChanged: (value) =>
-                //     Provider.of<SignupProvider>(context, listen: false)
-                //         .setAge(value),
-                // validator: (value) {
-                //   if (value == null || value.isEmpty) {
-                //     return 'Please enter your age';
-                //   }
-                //   return null;
-                // },
+                onChanged: (value) {
+                  if (value.isNotEmpty) {
+                    provider.setAge(int.parse(value));
+                  }
+                },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your age';
                   }
                   return null;
                 },
-                // validator: (value) {
-                //   if (value == null || value.isEmpty) {
-                //     return 'Please enter your age';
-                //   }
-                //   if (!RegExp(r'^\d{1-2}$').hasMatch(value)) {
-                //     return 'Please enter a valid age';
-                //   }
-                //   return null;
-                // },
               ),
               const SizedBox(height: 16),
-              FormField<DateTime>(
-                validator: (value) {
-                  if (provider.selectedDate == null) {
-                    return 'Please select your date of birth';
-                  }
-                  return null;
-                },
-                builder: (FormFieldState<DateTime> state) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      DateField(provider: provider),
-                      if (state.hasError)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8),
-                          child: Text(
-                            state.errorText!,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.error,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                    ],
-                  );
-                },
-              ),
+              DateField(provider: provider),
               const SizedBox(height: 16),
               TextFormField(
                 keyboardType: TextInputType.emailAddress,
@@ -125,19 +79,9 @@ class SignUpForm extends StatelessWidget {
                     borderSide: BorderSide(color: Color(0xFF78A6B8)),
                   ),
                 ),
-                // onChanged: (value) =>
-                //     Provider.of<SignupProvider>(context, listen: false)
-                //         .setEmail(value),
-                // validator: (value) {
-                //   if (value == null || value.isEmpty) {
-                //     return 'Please enter your email';
-                //   }
-                //   if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                //       .hasMatch(value)) {
-                //     return 'Please enter a valid email';
-                //   }
-                //   return null;
-                // },
+                onChanged: (value) {
+                  provider.setEmail(value);
+                },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your email';
@@ -150,34 +94,7 @@ class SignUpForm extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 16),
-              FormField<String>(
-                validator: (value) {
-                  if (provider.selectedGender == null ||
-                      provider.selectedGender!.isEmpty) {
-                    return 'Please select your gender';
-                  }
-                  return null;
-                },
-                builder: (FormFieldState<String> state) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GenderDropdown(provider: provider),
-                      if (state.hasError)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8),
-                          child: Text(
-                            state.errorText!,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.error,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                    ],
-                  );
-                },
-              ),
+              GenderDropdown(provider: provider),
             ],
           ),
         );

@@ -44,10 +44,8 @@ class SignupScreen extends StatelessWidget {
                           children: [
                             ProfileImagePicker(
                               onImageSelected: (image) {
-                                provider
-                                    .setSelectedImage(image); // Update provider
-                                state.didChange(
-                                    'imageSelected'); // Notify form field of changeA
+                                provider.setSelectedImage(image);
+                                state.didChange('imageSelected');
                               },
                             ),
                             if (state.hasError)
@@ -105,13 +103,32 @@ class SignupScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 15),
                 NextButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState?.validate() ?? false) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('Form is valid! Proceeding...')),
-                      );
-                      Navigator.pushNamed(context, '/setpass');
+                      final provider =
+                          Provider.of<SignupProvider>(context, listen: false);
+
+                      print('Submitting form with:');
+                      print(
+                          'Full Name: ${provider.fullName}, Age: ${provider.age}, DOB: ${provider.selectedDate}, Email: ${provider.email}, Gender: ${provider.selectedGender}');
+
+                      final success = await provider.saveUserData();
+
+                      if (success) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('User data saved successfully!')),
+                        );
+                        Navigator.pushNamed(context, '/setpass');
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                'Failed to save user data. Please try again.'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -121,34 +138,6 @@ class SignupScreen extends StatelessWidget {
                     }
                   },
                 ),
-                // NextButton(
-                //   onPressed: () async {
-                //     if (_formKey.currentState?.validate() ?? false) {
-                //       try {
-                //         final provider =
-                //             Provider.of<SignupProvider>(context, listen: false);
-                //         await provider.signUp(
-                //             'temporary-password'); // You should collect password from user
-
-                //         ScaffoldMessenger.of(context).showSnackBar(
-                //           const SnackBar(content: Text('Sign up successful!')),
-                //         );
-                //         Navigator.pushNamed(context, '/setpass');
-                //       } catch (e) {
-                //         ScaffoldMessenger.of(context).showSnackBar(
-                //           SnackBar(content: Text('Error: ${e.toString()}')),
-                //         );
-                //       }
-                //     } else {
-                //       ScaffoldMessenger.of(context).showSnackBar(
-                //         const SnackBar(
-                //             content:
-                //                 Text('Please fill in all fields correctly')),
-                //       );
-                //     }
-                //   },
-                // ),
-
                 const SizedBox(height: 15),
                 const LoginWith(),
                 const Login(),

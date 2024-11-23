@@ -27,18 +27,15 @@ class ForgotPasswordProvider extends ChangeNotifier {
       _errorMessage = null;
       notifyListeners();
 
-      // Simulate API call
       await Future.delayed(const Duration(seconds: 2));
 
       _isLoading = false;
       notifyListeners();
 
-      // Navigate to another page
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              const SetPasswordScreen(), // Replace with your target page
+          builder: (context) => const SetPasswordScreen(),
         ),
       );
     } catch (e) {

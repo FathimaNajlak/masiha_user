@@ -8,13 +8,9 @@ class TopDoctorsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get available height (screen height minus other elements)
     final screenHeight = MediaQuery.of(context).size.height;
     final topPadding = MediaQuery.of(context).padding.top;
-    final availableHeight = screenHeight -
-        topPadding -
-        kToolbarHeight -
-        250; // Adjust 250 based on other widgets' heights
+    final availableHeight = screenHeight - topPadding - kToolbarHeight - 250;
 
     return SizedBox(
       height: availableHeight,
@@ -42,18 +38,9 @@ class TopDoctorsSection extends StatelessWidget {
             ),
           ),
 
-          // Doctors list - wrapped in Expanded
           Expanded(
             child: Consumer<DoctorProvider>(
               builder: (context, provider, _) {
-                // if (provider.isLoading) {
-                //   return const Center(child: CircularProgressIndicator());
-                // }
-
-                // if (provider.error.isNotEmpty) {
-                //   return Center(child: Text(provider.error));
-                // }
-
                 if (provider.doctors.isEmpty) {
                   return const Center(
                     child: Text('No doctors available'),

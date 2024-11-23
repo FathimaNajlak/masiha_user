@@ -3,6 +3,7 @@ import 'package:masiha_user/providers/signup_provider.dart';
 
 class GenderDropdown extends StatelessWidget {
   final SignupProvider provider;
+
   const GenderDropdown({super.key, required this.provider});
 
   @override
@@ -22,7 +23,11 @@ class GenderDropdown extends StatelessWidget {
                 child: Text(gender),
               ))
           .toList(),
-      onChanged: (value) => provider.setGender(value!),
+      onChanged: (value) {
+        if (value != null) {
+          provider.setGender(value);
+        }
+      },
     );
   }
 }
