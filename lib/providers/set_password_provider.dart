@@ -9,7 +9,6 @@ class SetPasswordProvider extends ChangeNotifier {
   String? _passwordError;
   String? _confirmPasswordError;
 
-  // Getters
   String get password => _password;
   String get confirmPassword => _confirmPassword;
   bool get isPasswordVisible => _isPasswordVisible;
@@ -90,7 +89,6 @@ class SetPasswordProvider extends ChangeNotifier {
       _isLoading = true;
       notifyListeners();
 
-      // Simulate API call
       await Future.delayed(const Duration(seconds: 2));
 
       _isLoading = false;

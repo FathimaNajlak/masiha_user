@@ -7,7 +7,6 @@ class FirebaseAuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  // Existing Google Sign-In method
   Future<User?> signInWithGoogle(BuildContext context) async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
@@ -35,7 +34,6 @@ class FirebaseAuthService {
     }
   }
 
-  // New method for email and password sign in
   Future<User?> signInWithEmailAndPassword({
     required BuildContext context,
     required String email,

@@ -27,8 +27,7 @@ class _AllSetScreenState extends State<AllSetScreen>
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                const HomeScreen(), // Replace with your next screen
+            builder: (context) => const HomeScreen(),
           ),
         );
       }
@@ -61,8 +60,6 @@ class _AllSetScreenState extends State<AllSetScreen>
             ),
           ),
           const SizedBox(height: 8),
-
-          // Subtitle
           const Text(
             'Your account is ready to use',
             style: TextStyle(

@@ -18,7 +18,6 @@ class Onboarding1Page extends StatelessWidget {
       child: Column(
         children: [
           const SizedBox(height: 40),
-          // image with wave decoration
           Stack(
             alignment: Alignment.center,
             children: [

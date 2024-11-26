@@ -60,17 +60,23 @@
 // }
 
 import 'package:flutter/material.dart';
+import 'package:masiha_user/providers/doctor_provider.dart';
 import 'package:masiha_user/widgets/home/bottom_nav_bar.dart';
 import 'package:masiha_user/widgets/home/catogary.dart';
 import 'package:masiha_user/widgets/home/header.dart';
-import 'package:masiha_user/widgets/home/search.dart';
+import 'package:masiha_user/widgets/home/search/search_bar.dart';
 import 'package:masiha_user/widgets/home/top_doctors.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Access doctors list from DoctorProvider
+    final doctorProvider = Provider.of<DoctorProvider>(context);
+    final doctors = doctorProvider.doctors;
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -81,7 +87,7 @@ class HomeScreen extends StatelessWidget {
               children: [
                 const UserHeader(),
                 const SizedBox(height: 16),
-                const Search(),
+                const Search(), // Pass doctors list here
                 const SizedBox(height: 24),
                 const CategorySection(),
                 const SizedBox(height: 24),

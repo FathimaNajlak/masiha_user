@@ -1,33 +1,62 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
+import 'dart:io';
 
-class SignupProvider with ChangeNotifier {
-  DateTime? _selectedDate;
-  String? _selectedGender;
-  bool _termsAccepted = false;
-  File? _selectedImage;
+class RegistrationProvider extends ChangeNotifier {
+  final formKey = GlobalKey<FormState>();
+  final dateController = TextEditingController();
+  File? _profileImage;
 
-  DateTime? get selectedDate => _selectedDate;
-  String? get selectedGender => _selectedGender;
-  bool get termsAccepted => _termsAccepted;
-  File? get selectedImage => _selectedImage;
-  void setDate(DateTime date) {
-    _selectedDate = date;
+  String _fullName = '';
+  String _age = '';
+  String _dateOfBirth = '';
+  String _email = '';
+  String _gender = '';
+
+  File? get profileImage => _profileImage;
+  GlobalKey<FormState> get getFormKey => formKey;
+
+  bool get isFormValid =>
+      _profileImage != null && formKey.currentState?.validate() == true;
+
+  void setProfileImage(File? image) {
+    _profileImage = image;
     notifyListeners();
   }
 
-  void setGender(String gender) {
-    _selectedGender = gender;
+  void clearImage() {
+    _profileImage = null;
     notifyListeners();
   }
 
-  void toggleTerms(bool value) {
-    _termsAccepted = value;
+  void resetForm() {
+    _profileImage = null;
+    _fullName = '';
+    _age = '';
+    _dateOfBirth = '';
+    _email = '';
+    _gender = '';
+    dateController.clear();
     notifyListeners();
   }
 
-  void setSelectedImage(File image) {
-    _selectedImage = image;
+  void setFormData({
+    String? fullName,
+    String? age,
+    String? dateOfBirth,
+    String? email,
+    String? gender,
+  }) {
+    _fullName = fullName ?? _fullName;
+    _age = age ?? _age;
+    _dateOfBirth = dateOfBirth ?? _dateOfBirth;
+    _email = email ?? _email;
+    _gender = gender ?? _gender;
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    dateController.dispose();
+    super.dispose();
   }
 }

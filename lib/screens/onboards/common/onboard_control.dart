@@ -13,7 +13,6 @@ class OnboardingControls extends StatelessWidget {
     final currentPage = provider.currentPage;
     final currentSection = provider.currentSection;
 
-    // Calculate if we're on the last page of section 3
     final isLastPage =
         currentSection == 3 && currentPage == onboarding3Data.length - 1;
 
@@ -26,21 +25,21 @@ class OnboardingControls extends StatelessWidget {
             children: [
               ...List.generate(
                 onboarding1Data.length,
-                (index) => _buildIndicator(
+                (index) => _indicator(
                   isActive: currentSection == 1 && currentPage == index,
                 ),
               ),
               const SizedBox(width: 8),
               ...List.generate(
                 onboarding2Data.length,
-                (index) => _buildIndicator(
+                (index) => _indicator(
                   isActive: currentSection == 2 && currentPage == index,
                 ),
               ),
               const SizedBox(width: 8),
               ...List.generate(
                 onboarding3Data.length,
-                (index) => _buildIndicator(
+                (index) => _indicator(
                   isActive: currentSection == 3 && currentPage == index,
                 ),
               ),
@@ -57,7 +56,6 @@ class OnboardingControls extends StatelessWidget {
                   Navigator.pushReplacementNamed(context, '/letin');
                 } else {
                   provider.nextPage();
-                  // Check if section changed after nextPage
                   if (provider.currentSection != currentSection) {
                     Navigator.pushReplacementNamed(
                       context,
@@ -87,7 +85,7 @@ class OnboardingControls extends StatelessWidget {
     );
   }
 
-  Widget _buildIndicator({required bool isActive}) {
+  Widget _indicator({required bool isActive}) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 4),
       width: 8,

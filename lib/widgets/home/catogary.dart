@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:masiha_user/consts/colors.dart';
 
 class CategorySection extends StatelessWidget {
   const CategorySection({super.key});
@@ -28,20 +29,24 @@ class CategorySection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildCategoryItem(Icons.home, 'General', Colors.blue),
-            _buildCategoryItem(Icons.medical_services, 'Dentist', Colors.blue),
-            _buildCategoryItem(Icons.remove_red_eye, 'Ophthal', Colors.blue),
-            _buildCategoryItem(Icons.psychology, 'Neuro', Colors.blue),
+            _buildCategoryItem(Icons.home, 'General', AppColors.darkcolor),
+            _buildCategoryItem(
+                Icons.medical_services, 'Dentist', AppColors.darkcolor),
+            _buildCategoryItem(
+                Icons.remove_red_eye, 'Ophthal', AppColors.darkcolor),
+            _buildCategoryItem(Icons.psychology, 'Neuro', AppColors.darkcolor),
           ],
         ),
         const SizedBox(height: 16),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildCategoryItem(Icons.restaurant_menu, 'Nutrition', Colors.blue),
-            _buildCategoryItem(Icons.child_care, 'Pediatric', Colors.blue),
-            _buildCategoryItem(Icons.healing, 'nephro', Colors.blue),
-            _buildCategoryItem(Icons.more_horiz, 'More', Colors.blue),
+            _buildCategoryItem(
+                Icons.restaurant_menu, 'Nutrition', AppColors.darkcolor),
+            _buildCategoryItem(
+                Icons.child_care, 'Pediatric', AppColors.darkcolor),
+            _buildCategoryItem(Icons.healing, 'nephro', AppColors.darkcolor),
+            _buildCategoryItem(Icons.more_horiz, 'More', AppColors.darkcolor),
           ],
         ),
       ],

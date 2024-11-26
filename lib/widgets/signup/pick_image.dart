@@ -9,6 +9,7 @@ class ProfileImagePicker extends StatefulWidget {
   const ProfileImagePicker({super.key, this.onImageSelected});
 
   @override
+  // ignore: library_private_types_in_public_api
   _ProfileImagePickerState createState() => _ProfileImagePickerState();
 }
 
