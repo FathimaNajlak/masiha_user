@@ -84,17 +84,35 @@ class RegistrationForm extends StatelessWidget {
                   : null,
             ),
             const SizedBox(height: 24),
+            // NextButton(
+            //   onPressed: provider.isFormValid
+            //       ? () {
+            //           if (provider.getFormKey.currentState!.validate()) {
+            //             WidgetsBinding.instance.addPostFrameCallback((_) {
+            //               Navigator.pushNamed(context, '/home');
+            //             });
+            //           }
+            //         }
+            //       : null,
+            // ),
             NextButton(
               onPressed: provider.isFormValid
-                  ? () {
+                  ? () async {
                       if (provider.getFormKey.currentState!.validate()) {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          Navigator.pushNamed(context, '/home');
-                        });
+                        try {
+                          await provider.saveToFirestore();
+                          Navigator.pushNamed(context, '/setpass');
+                        } catch (e) {
+                          // Show error to the user
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Error saving data: $e')),
+                          );
+                        }
                       }
                     }
                   : null,
             ),
+
             const SizedBox(height: 16),
             const LoginWith(),
             const SizedBox(height: 16),
