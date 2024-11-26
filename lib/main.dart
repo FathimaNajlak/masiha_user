@@ -8,7 +8,6 @@ import 'package:masiha_user/providers/onboarding_provider.dart';
 import 'package:masiha_user/providers/set_password_provider.dart';
 import 'package:masiha_user/providers/signup_provider.dart';
 import 'package:masiha_user/screens/home/home.dart';
-import 'package:masiha_user/screens/home/search.dart';
 import 'package:masiha_user/screens/login_signup/all_set.dart';
 import 'package:masiha_user/screens/login_signup/forgot_password.dart';
 import 'package:masiha_user/screens/login_signup/let_in.dart';
@@ -32,7 +31,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => LoginProvider()),
         ChangeNotifierProvider(create: (_) => OnboardingProvider()),
         ChangeNotifierProvider(create: (_) => ForgotPasswordProvider()),
-        ChangeNotifierProvider(create: (_) => SignupProvider()),
+        ChangeNotifierProvider(create: (_) => RegistrationProvider()),
         ChangeNotifierProvider(create: (_) => SetPasswordProvider()),
         ChangeNotifierProvider(create: (_) => DoctorProvider()),
       ],
@@ -54,7 +53,7 @@ class MyApp extends StatelessWidget {
         '/onboard3': (context) => const Onboarding3(),
         '/letin': (context) => const LetinPage(),
         '/login': (context) => LoginScreen(),
-        '/signup': (context) => SignupScreen(),
+        '/signup': (context) => RegistrationPage(),
         '/forgotpass': (context) => const ForgotPasswordScreen(),
         '/allset': (context) => const AllSetScreen(),
         '/home': (context) => const HomeScreen(),

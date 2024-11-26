@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:masiha_user/providers/doctor_provider.dart';
+import 'package:masiha_user/screens/home/doctor_details.dart';
 import 'package:masiha_user/widgets/home/doctor_card.dart';
 import 'package:provider/provider.dart';
 
@@ -58,6 +59,16 @@ class TopDoctorsSection extends StatelessWidget {
                       doctor: provider.doctors[index],
                       onFavorite: () => provider
                           .toggleFavorite(provider.doctors[index].id as int),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const DoctorDetailsScreen(
+                              doctorId: '1',
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 );

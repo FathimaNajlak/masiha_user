@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Login extends StatelessWidget {
-  const Login({super.key});
+class ExistingAccountPrompt extends StatelessWidget {
+  const ExistingAccountPrompt({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -9,8 +9,11 @@ class Login extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Text(
-          'already have an account? ',
-          style: TextStyle(color: Colors.grey),
+          'Already have an account? ',
+          style: TextStyle(
+            color: Colors.grey,
+            fontSize: 14,
+          ),
         ),
         TextButton(
           onPressed: () {
@@ -19,7 +22,9 @@ class Login extends StatelessWidget {
           child: const Text(
             'Log in',
             style: TextStyle(
-              color: Color(0xFF78A6B8),
+              color: Color(0xFF79B3D4),
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),

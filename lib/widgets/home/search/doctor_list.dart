@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:masiha_user/providers/doctor_filter_provider.dart';
+import 'package:masiha_user/screens/home/doctor_details.dart';
 import 'package:masiha_user/widgets/home/doctor_card.dart';
 import 'package:provider/provider.dart';
 
@@ -16,9 +17,18 @@ class DoctorsList extends StatelessWidget {
       itemBuilder: (context, index) {
         final doctor = filterProvider.filteredDoctors[index];
         return DoctorCard(
-          doctor: doctor,
-          onFavorite: () {},
-        );
+            doctor: doctor,
+            onFavorite: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const DoctorDetailsScreen(
+                    doctorId: '1',
+                  ),
+                ),
+              );
+            });
       },
     );
   }

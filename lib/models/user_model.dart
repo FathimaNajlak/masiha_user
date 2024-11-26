@@ -1,5 +1,4 @@
 // lib/models/user_model.dart
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
   final String fullName;
@@ -21,7 +20,7 @@ class UserModel {
   });
 
   // Convert to Map for Firestore
-  Map<String, dynamic> toMap() {
+  toJson() {
     return {
       'fullName': fullName,
       'age': age,
@@ -31,18 +30,5 @@ class UserModel {
       'createdAt': createdAt ?? DateTime.now(),
       'updatedAt': updatedAt ?? DateTime.now(),
     };
-  }
-
-  // Create UserModel from Firestore data
-  factory UserModel.fromMap(Map<String, dynamic> map) {
-    return UserModel(
-      fullName: map['fullName'] ?? '',
-      age: map['age'] ?? 0,
-      dateOfBirth: (map['dateOfBirth'] as Timestamp).toDate(),
-      email: map['email'] ?? '',
-      gender: map['gender'] ?? '',
-      createdAt: (map['createdAt'] as Timestamp?)?.toDate(),
-      updatedAt: (map['updatedAt'] as Timestamp?)?.toDate(),
-    );
   }
 }
