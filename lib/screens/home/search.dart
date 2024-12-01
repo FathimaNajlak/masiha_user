@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:masiha_user/consts/colors.dart';
 import 'package:masiha_user/models/doctor.dart';
-import 'package:provider/provider.dart';
-import 'package:masiha_user/providers/doctor_provider.dart';
 import 'package:masiha_user/providers/doctor_filter_provider.dart';
+import 'package:masiha_user/providers/doctor_provider.dart';
+import 'package:masiha_user/widgets/home/search/doctor_list.dart';
+import 'package:provider/provider.dart';
 
 class DoctorSearchScreen extends StatelessWidget {
   const DoctorSearchScreen({super.key});
@@ -17,21 +17,32 @@ class DoctorSearchScreen extends StatelessWidget {
   }
 }
 
-class DoctorSearchContent extends StatelessWidget {
+class DoctorSearchContent extends StatefulWidget {
   const DoctorSearchContent({super.key});
+
+  @override
+  State<DoctorSearchContent> createState() => _DoctorSearchContentState();
+}
+
+class _DoctorSearchContentState extends State<DoctorSearchContent> {
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the filtered doctors list after the first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final doctorProvider =
+          Provider.of<DoctorProvider>(context, listen: false);
+      final filterProvider =
+          Provider.of<DoctorFilterProvider>(context, listen: false);
+      // Initialize with empty search to show all doctors
+      filterProvider.setSearchQuery('', doctorProvider.doctors);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final doctorProvider = Provider.of<DoctorProvider>(context);
-    final filterProvider = Provider.of<DoctorFilterProvider>(context);
     final doctors = doctorProvider.doctors;
-
-    // Initialize filtered doctors if empty
-    if (filterProvider.filteredDoctors.isEmpty &&
-        filterProvider.searchQuery.isEmpty &&
-        filterProvider.selectedSpecialty.isEmpty) {
-      filterProvider.setSearchQuery('', doctors);
-    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -53,7 +64,7 @@ class DoctorSearchContent extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: SearchBar(doctors: doctors),
           ),
-          SpecialtyFilter(doctors: doctors),
+          //SpecialtyFilter(doctors: doctors),
           const Expanded(
             child: DoctorsList(),
           ),
@@ -90,140 +101,6 @@ class SearchBar extends StatelessWidget {
         ),
       ),
       onChanged: (value) => filterProvider.setSearchQuery(value, doctors),
-    );
-  }
-}
-
-class SpecialtyFilter extends StatelessWidget {
-  final List<Doctor> doctors;
-
-  const SpecialtyFilter({super.key, required this.doctors});
-
-  @override
-  Widget build(BuildContext context) {
-    final filterProvider = Provider.of<DoctorFilterProvider>(context);
-    final specialties =
-        doctors.map((doctor) => doctor.specialty).toSet().toList();
-
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        children: [
-          FilterChip(
-            label: const Text('All'),
-            selected: filterProvider.selectedSpecialty.isEmpty,
-            onSelected: (_) => filterProvider.setSpecialty('', doctors),
-          ),
-          const SizedBox(width: 8),
-          ...specialties.map((specialty) => Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: FilterChip(
-                  label: Text(specialty),
-                  selected: filterProvider.selectedSpecialty == specialty,
-                  onSelected: (_) =>
-                      filterProvider.setSpecialty(specialty, doctors),
-                ),
-              )),
-        ],
-      ),
-    );
-  }
-}
-
-class DoctorsList extends StatelessWidget {
-  const DoctorsList({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final filterProvider = Provider.of<DoctorFilterProvider>(context);
-    final doctorProvider = Provider.of<DoctorProvider>(context);
-
-    return ListView.builder(
-      padding: const EdgeInsets.all(16),
-      itemCount: filterProvider.filteredDoctors.length,
-      itemBuilder: (context, index) {
-        final doctor = filterProvider.filteredDoctors[index];
-        final originalIndex = doctorProvider.doctors.indexOf(doctor);
-
-        return Card(
-          margin: const EdgeInsets.only(bottom: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    doctor.imageUrl,
-                    width: 80,
-                    height: 80,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        doctor.name,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        doctor.specialty,
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        doctor.hospital,
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Column(
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        doctor.isFavorite
-                            ? Icons.favorite
-                            : Icons.favorite_border,
-                        color: doctor.isFavorite ? Colors.red : Colors.grey,
-                      ),
-                      onPressed: () =>
-                          doctorProvider.toggleFavorite(originalIndex),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Implement booking functionality
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.lightcolor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Text('Book Now'),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
     );
   }
 }
