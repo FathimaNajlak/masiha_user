@@ -22,7 +22,7 @@ class Onboarding1View extends StatelessWidget {
                 },
                 itemCount: onboarding1Data.length,
                 itemBuilder: (context, index) {
-                  return Onboarding1Page(content: onboarding1Data[index]);
+                  return OnboardingPage(content: onboarding1Data[index]);
                 },
               ),
             ),

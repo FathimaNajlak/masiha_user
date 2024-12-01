@@ -41,7 +41,7 @@ class Onboarding2View extends StatelessWidget {
                   },
                   itemCount: onboarding2Data.length,
                   itemBuilder: (context, index) {
-                    return Onboarding1Page(content: onboarding2Data[index]);
+                    return OnboardingPage(content: onboarding2Data[index]);
                   },
                 ),
               ),
