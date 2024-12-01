@@ -3,10 +3,10 @@ import 'package:masiha_user/consts/colors.dart';
 import 'package:masiha_user/models/onboardings/onboarding1_model.dart';
 import 'package:masiha_user/widgets/onboards/wave_clipper.dart';
 
-class Onboarding1Page extends StatelessWidget {
+class OnboardingPage extends StatelessWidget {
   final OnboardingContent content;
 
-  const Onboarding1Page({
+  const OnboardingPage({
     super.key,
     required this.content,
   });

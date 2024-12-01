@@ -10,6 +10,9 @@ class SetPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final email = ModalRoute.of(context)?.settings.arguments as String? ?? '';
+    print('Received email in SetPasswordScreen: $email'); // Debug print
+
     return ChangeNotifierProvider(
       create: (_) => SetPasswordProvider(),
       child: Scaffold(
@@ -29,18 +32,18 @@ class SetPasswordScreen extends StatelessWidget {
             ),
           ),
         ),
-        body: const SafeArea(
+        body: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(24.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SizedBox(height: 32),
-                PasswordField(),
-                SizedBox(height: 24),
-                ConfirmPasswordField(),
-                SizedBox(height: 32),
-                CreatePasswordButton(),
+                const SizedBox(height: 32),
+                const PasswordField(),
+                const SizedBox(height: 24),
+                const ConfirmPasswordField(),
+                const SizedBox(height: 32),
+                CreatePasswordButton(email: email),
               ],
             ),
           ),

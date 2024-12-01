@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SetPasswordProvider extends ChangeNotifier {
@@ -9,6 +10,7 @@ class SetPasswordProvider extends ChangeNotifier {
   String? _passwordError;
   String? _confirmPasswordError;
 
+  // Getters
   String get password => _password;
   String get confirmPassword => _confirmPassword;
   bool get isPasswordVisible => _isPasswordVisible;
@@ -16,6 +18,9 @@ class SetPasswordProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get passwordError => _passwordError;
   String? get confirmPasswordError => _confirmPasswordError;
+
+  // Firebase Auth instance
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   void setPassword(String value) {
     _password = value;
@@ -77,11 +82,8 @@ class SetPasswordProvider extends ChangeNotifier {
     return true;
   }
 
-  Future<bool> createNewPassword() async {
-    final isPasswordValid = validatePassword();
-    final isConfirmPasswordValid = validateConfirmPassword();
-
-    if (!isPasswordValid || !isConfirmPasswordValid) {
+  Future<bool> createNewPassword(String email) async {
+    if (!validatePassword() || !validateConfirmPassword()) {
       return false;
     }
 
@@ -89,13 +91,46 @@ class SetPasswordProvider extends ChangeNotifier {
       _isLoading = true;
       notifyListeners();
 
-      await Future.delayed(const Duration(seconds: 2));
+      // Print debug information
+      print('Attempting to create user with email: $email');
+
+      // Create user with email and password
+      final UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: email.trim(),
+        password: _password.trim(),
+      );
+
+      print('User created successfully: ${userCredential.user?.uid}');
 
       _isLoading = false;
       notifyListeners();
       return true;
+    } on FirebaseAuthException catch (e) {
+      _isLoading = false;
+      print('Firebase Auth Error: ${e.code} - ${e.message}'); // Debug print
+
+      switch (e.code) {
+        case 'weak-password':
+          _passwordError = 'The password provided is too weak.';
+          break;
+        case 'email-already-in-use':
+          _passwordError = 'An account already exists for this email.';
+          break;
+        case 'invalid-email':
+          _passwordError = 'The email address is not valid.';
+          break;
+        default:
+          _passwordError =
+              e.message ?? 'An error occurred while creating account.';
+      }
+
+      notifyListeners();
+      return false;
     } catch (e) {
       _isLoading = false;
+      print('General Error: $e'); // Debug print
+      _passwordError = 'An unexpected error occurred.';
       notifyListeners();
       return false;
     }
