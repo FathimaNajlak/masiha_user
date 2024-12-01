@@ -5,30 +5,35 @@ import 'package:masiha_user/screens/onboards/common/onboard_control.dart';
 import 'package:masiha_user/screens/onboards/common/onboard_page.dart';
 import 'package:provider/provider.dart';
 
-class Onboarding3View extends StatelessWidget {
+class Onboarding3View extends StatefulWidget {
   const Onboarding3View({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // Ensure correct section is set when view is loaded
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final provider = context.read<OnboardingProvider>();
-      if (provider.currentSection != 3) {
-        provider.setSection(3);
-      }
-    });
+  State<Onboarding3View> createState() => _Onboarding3ViewState();
+}
 
+class _Onboarding3ViewState extends State<Onboarding3View> {
+  late PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<OnboardingProvider>().setSection(3);
+    });
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        final provider = context.read<OnboardingProvider>();
-        if (provider.currentPage == 0) {
-          provider.setSection(2);
-          Navigator.pushReplacementNamed(context, '/onboard2');
-          return false;
-        }
-        provider.previousPage();
-        return false;
-      },
+      onWillPop: () async => false,
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
@@ -36,6 +41,7 @@ class Onboarding3View extends StatelessWidget {
             children: [
               Expanded(
                 child: PageView.builder(
+                  controller: _pageController,
                   onPageChanged: (index) {
                     context.read<OnboardingProvider>().setPage(index);
                   },
@@ -45,7 +51,7 @@ class Onboarding3View extends StatelessWidget {
                   },
                 ),
               ),
-              const OnboardingControls(),
+              OnboardingControls(pageController: _pageController),
             ],
           ),
         ),

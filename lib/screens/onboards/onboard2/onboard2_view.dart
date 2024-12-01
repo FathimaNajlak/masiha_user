@@ -5,30 +5,36 @@ import 'package:masiha_user/screens/onboards/common/onboard_control.dart';
 import 'package:masiha_user/screens/onboards/common/onboard_page.dart';
 import 'package:provider/provider.dart';
 
-class Onboarding2View extends StatelessWidget {
+class Onboarding2View extends StatefulWidget {
   const Onboarding2View({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // Ensure correct section is set when view is loaded
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final provider = context.read<OnboardingProvider>();
-      if (provider.currentSection != 2) {
-        provider.setSection(2);
-      }
-    });
+  State<Onboarding2View> createState() => _Onboarding2ViewState();
+}
 
+class _Onboarding2ViewState extends State<Onboarding2View> {
+  late PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+    // Set the correct section
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<OnboardingProvider>().setSection(2);
+    });
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        final provider = context.read<OnboardingProvider>();
-        if (provider.currentPage == 0) {
-          provider.setSection(1);
-          Navigator.pushReplacementNamed(context, '/onboard1');
-          return false;
-        }
-        provider.previousPage();
-        return false;
-      },
+      onWillPop: () async => false,
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
@@ -36,6 +42,7 @@ class Onboarding2View extends StatelessWidget {
             children: [
               Expanded(
                 child: PageView.builder(
+                  controller: _pageController,
                   onPageChanged: (index) {
                     context.read<OnboardingProvider>().setPage(index);
                   },
@@ -45,7 +52,7 @@ class Onboarding2View extends StatelessWidget {
                   },
                 ),
               ),
-              const OnboardingControls(),
+              OnboardingControls(pageController: _pageController),
             ],
           ),
         ),
