@@ -5,7 +5,12 @@ import 'package:masiha_user/providers/onboarding_provider.dart';
 import 'package:provider/provider.dart';
 
 class OnboardingControls extends StatelessWidget {
-  const OnboardingControls({super.key});
+  final PageController pageController;
+
+  const OnboardingControls({
+    super.key,
+    required this.pageController,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -50,18 +55,28 @@ class OnboardingControls extends StatelessWidget {
             width: double.infinity,
             height: 56,
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 final provider = context.read<OnboardingProvider>();
+
                 if (isLastPage) {
                   Navigator.pushReplacementNamed(context, '/letin');
+                  return;
+                }
+
+                if (provider.isLastPageInSection()) {
+                  // If we're at the last page of current section
+                  provider.nextPage(); // This will increment the section
+                  Navigator.pushReplacementNamed(
+                    context,
+                    '/onboard${provider.currentSection}',
+                  );
                 } else {
+                  // If we're not at the last page, just animate to next page
+                  await pageController.nextPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
                   provider.nextPage();
-                  if (provider.currentSection != currentSection) {
-                    Navigator.pushReplacementNamed(
-                      context,
-                      '/onboard${provider.currentSection}',
-                    );
-                  }
                 }
               },
               style: ElevatedButton.styleFrom(

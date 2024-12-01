@@ -12,18 +12,19 @@ class FormContainerWidget extends StatefulWidget {
   final ValueChanged<String>? onFieldSubmitted;
   final TextInputType? inputType;
 
-  const FormContainerWidget(
-      {super.key,
-      this.controller,
-      this.isPasswordField,
-      this.fieldKey,
-      this.hintText,
-      this.labelText,
-      this.helperText,
-      this.onSaved,
-      this.validator,
-      this.onFieldSubmitted,
-      this.inputType});
+  const FormContainerWidget({
+    super.key,
+    this.controller,
+    this.isPasswordField,
+    this.fieldKey,
+    this.hintText,
+    this.labelText,
+    this.helperText,
+    this.onSaved,
+    this.validator,
+    this.onFieldSubmitted,
+    this.inputType,
+  });
 
   @override
   _FormContainerWidgetState createState() => _FormContainerWidgetState();
@@ -55,19 +56,22 @@ class _FormContainerWidgetState extends State<FormContainerWidget> {
           filled: true,
           hintText: widget.hintText,
           hintStyle: const TextStyle(color: Colors.black45),
-          suffixIcon: GestureDetector(
-            onTap: () {
-              setState(() {
-                _obscureText = !_obscureText;
-              });
-            },
-            child: widget.isPasswordField == true
-                ? Icon(
+          errorStyle: const TextStyle(color: Colors.red),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          suffixIcon: widget.isPasswordField == true
+              ? GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _obscureText = !_obscureText;
+                    });
+                  },
+                  child: Icon(
                     _obscureText ? Icons.visibility_off : Icons.visibility,
                     color: _obscureText == false ? Colors.blue : Colors.grey,
-                  )
-                : const Text(""),
-          ),
+                  ),
+                )
+              : null,
         ),
       ),
     );

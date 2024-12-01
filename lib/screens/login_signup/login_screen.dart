@@ -7,7 +7,7 @@ import 'package:masiha_user/screens/login_signup/all_set.dart';
 import 'package:masiha_user/screens/login_signup/signup_screen.dart';
 
 import 'package:masiha_user/services/firebase_auth_service.dart';
-import 'package:masiha_user/widgets/form_container.dart';
+import 'package:masiha_user/widgets/signup/form_container.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
