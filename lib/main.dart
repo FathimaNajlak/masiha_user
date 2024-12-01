@@ -5,14 +5,12 @@ import 'package:masiha_user/providers/doctor_provider.dart';
 import 'package:masiha_user/providers/forgot_password_provider.dart';
 import 'package:masiha_user/providers/login_screen_provider.dart';
 import 'package:masiha_user/providers/onboarding_provider.dart';
-import 'package:masiha_user/providers/set_password_provider.dart';
 import 'package:masiha_user/providers/signup_provider.dart';
 import 'package:masiha_user/screens/home/home.dart';
 import 'package:masiha_user/screens/login_signup/all_set.dart';
 import 'package:masiha_user/screens/login_signup/forgot_password.dart';
 import 'package:masiha_user/screens/login_signup/let_in.dart';
 import 'package:masiha_user/screens/login_signup/login_screen.dart';
-import 'package:masiha_user/screens/login_signup/set_password.dart';
 import 'package:masiha_user/screens/login_signup/signup_screen.dart';
 import 'package:masiha_user/screens/onboards/onboard1/onboard1.dart';
 import 'package:masiha_user/screens/onboards/onboard2/onboard2.dart';
@@ -32,7 +30,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => OnboardingProvider()),
         ChangeNotifierProvider(create: (_) => ForgotPasswordProvider()),
         ChangeNotifierProvider(create: (_) => SignupProvider()),
-        ChangeNotifierProvider(create: (_) => SetPasswordProvider()),
+        //ChangeNotifierProvider(create: (_) => SetPasswordProvider()),
         ChangeNotifierProvider(create: (_) => DoctorProvider()),
       ],
       child: const MyApp(),
@@ -57,7 +55,7 @@ class MyApp extends StatelessWidget {
         '/forgotpass': (context) => const ForgotPasswordScreen(),
         '/allset': (context) => const AllSetScreen(),
         '/home': (context) => const HomeScreen(),
-        '/setpass': (context) => const SetPasswordScreen(),
+        //'/setpass': (context) => const SetPasswordScreen(),
         // '/pass': (context) =>  CreatePasswordScreen(email: RegistrationProvider._email,),
       },
       theme: ThemeData(

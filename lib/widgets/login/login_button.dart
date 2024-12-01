@@ -1,66 +1,24 @@
-// // import 'package:flutter/material.dart';
-// import 'package:flutter/material.dart';
-// import 'package:google_fonts/google_fonts.dart';
-// import 'package:masiha_user/consts/colors.dart';
-// import 'package:masiha_user/services/firebase_auth_service.dart';
+import 'package:flutter/material.dart';
+import 'package:masiha_user/consts/colors.dart';
+import 'package:masiha_user/widgets/login/button.dart';
 
-// class LoginButton extends StatelessWidget {
-//   final GlobalKey<FormState> formKey;
-//   final TextEditingController emailController;
-//   final TextEditingController passwordController;
+class LoginButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final bool isLoading;
 
-//   const LoginButton({
-//     super.key,
-//     required this.formKey,
-//     required this.emailController,
-//     required this.passwordController,
-//   });
+  const LoginButton({
+    super.key,
+    required this.onPressed,
+    required this.isLoading,
+  });
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return SizedBox(
-//       width: double.infinity,
-//       child: ElevatedButton(
-//         onPressed: () async {
-//           FocusScope.of(context).unfocus();
-
-//           if (formKey.currentState!.validate()) {
-//             final FirebaseAuthService authService = FirebaseAuthService();
-
-//             final user = await authService.signInWithEmailAndPassword(
-//               context: context,
-//               email: emailController.text.trim(),
-//               password: passwordController.text.trim(),
-//             );
-
-//             if (user != null) {
-//               Navigator.pushReplacementNamed(context, '/home');
-//             }
-//           } else {
-//             ScaffoldMessenger.of(context).showSnackBar(
-//               const SnackBar(
-//                 content: Text('Please fix the errors in the form'),
-//                 backgroundColor: Colors.red,
-//               ),
-//             );
-//           }
-//         },
-//         style: ElevatedButton.styleFrom(
-//           backgroundColor: AppColors.darkcolor,
-//           padding: const EdgeInsets.symmetric(vertical: 16),
-//           shape: RoundedRectangleBorder(
-//             borderRadius: BorderRadius.circular(30),
-//           ),
-//         ),
-//         child: Text(
-//           'Log In',
-//           style: GoogleFonts.roboto(
-//             fontSize: 18,
-//             fontWeight: FontWeight.w600,
-//             color: Colors.white,
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return PrimaryButton(
+      label: "Login",
+      onPressed: onPressed,
+      isLoading: isLoading,
+      color: AppColors.darkcolor,
+    );
+  }
+}
