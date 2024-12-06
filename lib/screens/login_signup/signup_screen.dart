@@ -87,7 +87,7 @@ class _SignUpPageState extends State<SignUpPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("User is successfully created")),
         );
-        Navigator.pushNamed(context, "/allset");
+        Navigator.pushNamed(context, "/addDetails");
       }
     } catch (e) {
       setState(() {
@@ -206,3 +206,76 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 }
+// import 'package:flutter/material.dart';
+// import 'package:masiha_user/consts/colors.dart';
+// import 'package:masiha_user/widgets/signup/button.dart';
+// import 'package:masiha_user/widgets/signup/form_fields.dart';
+// import 'package:masiha_user/widgets/signup/login_redirect.dart';
+
+// class SignUpPage extends StatefulWidget {
+//   const SignUpPage({super.key});
+
+//   @override
+//   State<SignUpPage> createState() => _SignUpPageState();
+// }
+
+// class _SignUpPageState extends State<SignUpPage> {
+//   final _formKey = GlobalKey<FormState>();
+//   final TextEditingController _emailController = TextEditingController();
+//   final TextEditingController _passwordController = TextEditingController();
+
+//   @override
+//   void dispose() {
+//     _emailController.dispose();
+//     _passwordController.dispose();
+//     super.dispose();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         automaticallyImplyLeading: false,
+//       ),
+//       body: Center(
+//         child: SingleChildScrollView(
+//           child: Padding(
+//             padding: const EdgeInsets.symmetric(horizontal: 15),
+//             child: Column(
+//               mainAxisAlignment: MainAxisAlignment.center,
+//               children: [
+//                 const _TitleWidget(),
+//                 const SizedBox(height: 30),
+//                 SignUpForm(formKey: _formKey),
+//                 const SizedBox(height: 30),
+//                 SignUpButton(
+//                   formKey: _formKey,
+//                   emailController: _emailController,
+//                   passwordController: _passwordController,
+//                 ),
+//                 const SizedBox(height: 20),
+//                 const LoginRedirect(),
+//               ],
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// class _TitleWidget extends StatelessWidget {
+//   const _TitleWidget();
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Text(
+//       "Sign Up",
+//       style: TextStyle(
+//         fontSize: 27,
+//         fontWeight: FontWeight.bold,
+//         color: AppColors.darkcolor,
+//       ),
+//     );
+//   }
+// }

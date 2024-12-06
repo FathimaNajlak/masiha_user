@@ -6,6 +6,8 @@ import 'package:masiha_user/providers/forgot_password_provider.dart';
 import 'package:masiha_user/providers/login_screen_provider.dart';
 import 'package:masiha_user/providers/onboarding_provider.dart';
 import 'package:masiha_user/providers/signup_provider.dart';
+import 'package:masiha_user/providers/user_details_provider.dart';
+import 'package:masiha_user/screens/add_details.dart';
 import 'package:masiha_user/screens/home/home.dart';
 import 'package:masiha_user/screens/login_signup/all_set.dart';
 import 'package:masiha_user/screens/login_signup/forgot_password.dart';
@@ -30,8 +32,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => OnboardingProvider()),
         ChangeNotifierProvider(create: (_) => ForgotPasswordProvider()),
         ChangeNotifierProvider(create: (_) => SignupProvider()),
-        //ChangeNotifierProvider(create: (_) => SetPasswordProvider()),
         ChangeNotifierProvider(create: (_) => DoctorProvider()),
+        ChangeNotifierProvider(create: (_) => UserDetailsProvider()),
       ],
       child: const MyApp(),
     ),
@@ -55,6 +57,7 @@ class MyApp extends StatelessWidget {
         '/forgotpass': (context) => const ForgotPasswordScreen(),
         '/allset': (context) => const AllSetScreen(),
         '/home': (context) => const HomeScreen(),
+        '/addDetails': (context) => const UserDetailsPage(),
         //'/setpass': (context) => const SetPasswordScreen(),
         // '/pass': (context) =>  CreatePasswordScreen(email: RegistrationProvider._email,),
       },
