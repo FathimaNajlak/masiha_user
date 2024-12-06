@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
         );
 
         if (user != null && mounted) {
-          Navigator.pushReplacementNamed(context, '/allset');
+          Navigator.pushReplacementNamed(context, '/addDetails');
         }
       } finally {
         if (mounted) setState(() => _isSigning = false);
@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
       User? user = await _auth.signInWithGoogle();
 
       if (user != null && mounted) {
-        Navigator.pushReplacementNamed(context, '/allset');
+        Navigator.pushReplacementNamed(context, '/addDetails');
       }
     } finally {
       if (mounted) setState(() => _isSigning = false);

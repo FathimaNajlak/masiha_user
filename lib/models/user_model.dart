@@ -1,34 +1,44 @@
-// lib/models/user_model.dart
-
 class UserModel {
-  final String fullName;
-  final int age;
-  final DateTime dateOfBirth;
-  final String email;
-  final String gender;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
+  String? fullName;
+  int? age;
+  DateTime? dateOfBirth;
+  String? email;
+  String? gender;
+
+  String? imagePath;
 
   UserModel({
-    required this.fullName,
-    required this.age,
-    required this.dateOfBirth,
-    required this.email,
-    required this.gender,
-    this.createdAt,
-    this.updatedAt,
+    this.fullName,
+    this.age,
+    this.dateOfBirth,
+    this.email,
+    this.gender,
+    this.imagePath,
   });
 
-  // Convert to Map for Firestore
-  toJson() {
+  // Convert object to JSON
+  Map<String, dynamic> toJson() {
     return {
       'fullName': fullName,
       'age': age,
-      'dateOfBirth': dateOfBirth,
+      'dateOfBirth': dateOfBirth?.toIso8601String(),
       'email': email,
       'gender': gender,
-      'createdAt': createdAt ?? DateTime.now(),
-      'updatedAt': updatedAt ?? DateTime.now(),
+      'imagePath': imagePath,
+      // Optional: Serialize enum as a string
     };
+  }
+
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      fullName: json['fullName'],
+      age: json['age'],
+      dateOfBirth: json['dateOfBirth'] != null
+          ? DateTime.parse(json['dateOfBirth'])
+          : null,
+      email: json['email'],
+      gender: json['gender'],
+      imagePath: json['imagePath'],
+    );
   }
 }
