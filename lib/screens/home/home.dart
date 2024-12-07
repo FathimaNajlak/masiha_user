@@ -4,6 +4,7 @@ import 'package:masiha_user/widgets/home/bottom_nav_bar.dart';
 import 'package:masiha_user/widgets/home/catogary.dart';
 import 'package:masiha_user/widgets/home/header.dart';
 import 'package:masiha_user/widgets/home/available_doctors.dart';
+import 'package:masiha_user/widgets/home/search_bar.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -25,7 +26,7 @@ class HomeScreen extends StatelessWidget {
               children: [
                 const UserHeader(),
                 const SizedBox(height: 16),
-                // Pass doctors list here
+                const DoctorSearchBar(),
                 const SizedBox(height: 24),
                 const CategorySection(),
                 const SizedBox(height: 24),
