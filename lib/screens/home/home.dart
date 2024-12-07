@@ -3,8 +3,7 @@ import 'package:masiha_user/providers/doctor_provider.dart';
 import 'package:masiha_user/widgets/home/bottom_nav_bar.dart';
 import 'package:masiha_user/widgets/home/catogary.dart';
 import 'package:masiha_user/widgets/home/header.dart';
-import 'package:masiha_user/widgets/home/search/search_bar.dart';
-import 'package:masiha_user/widgets/home/top_doctors.dart';
+import 'package:masiha_user/widgets/home/available_doctors.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -26,14 +25,14 @@ class HomeScreen extends StatelessWidget {
               children: [
                 const UserHeader(),
                 const SizedBox(height: 16),
-                const Search(), // Pass doctors list here
+                // Pass doctors list here
                 const SizedBox(height: 24),
                 const CategorySection(),
                 const SizedBox(height: 24),
                 SizedBox(
                   height: MediaQuery.of(context).size.height *
                       0.4, // Limited height
-                  child: const TopDoctorsSection(),
+                  child: const AvailableDoctorsSection(),
                 ),
               ],
             ),
