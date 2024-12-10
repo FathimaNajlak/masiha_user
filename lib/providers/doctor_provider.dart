@@ -39,8 +39,12 @@ import 'package:masiha_user/models/doctor_details_model.dart';
 
 class DoctorProvider with ChangeNotifier {
   List<DoctorDetailsModel> _doctors = [];
-  List<DoctorDetailsModel> get doctors => _doctors;
+  List<DoctorDetailsModel> _filteredDoctors = [];
   bool _isLoading = false;
+
+  // Update the getter to return filtered doctors when search is active
+  List<DoctorDetailsModel> get doctors =>
+      _filteredDoctors.isEmpty ? _doctors : _filteredDoctors;
   bool get isLoading => _isLoading;
 
   Future<void> fetchAcceptedDoctors() async {
@@ -58,6 +62,9 @@ class DoctorProvider with ChangeNotifier {
         return DoctorDetailsModel.fromJson(data)..requestId = doc.id;
       }).toList();
 
+      // Reset filtered doctors when fetching new data
+      _filteredDoctors = [];
+
       _isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -67,7 +74,34 @@ class DoctorProvider with ChangeNotifier {
     }
   }
 
-  // Add method to toggle favorite (you'll need to implement the logic to store favorites)
+  // Add search functionality
+  void searchDoctors(String query) {
+    if (query.trim().isEmpty) {
+      _filteredDoctors = [];
+    } else {
+      _filteredDoctors = _doctors.where((doctor) {
+        final nameMatch =
+            doctor.fullName?.toLowerCase().contains(query.toLowerCase()) ??
+                false;
+        final specialtyMatch =
+            doctor.specialty?.toLowerCase().contains(query.toLowerCase()) ??
+                false;
+        final hospitalMatch =
+            doctor.hospitalName?.toLowerCase().contains(query.toLowerCase()) ??
+                false;
+
+        return nameMatch || specialtyMatch || hospitalMatch;
+      }).toList();
+    }
+    notifyListeners();
+  }
+
+  // Clear search results
+  void clearSearch() {
+    _filteredDoctors = [];
+    notifyListeners();
+  }
+
   Future<void> toggleFavorite(String doctorId) async {
     // Implement favorite logic here
     notifyListeners();

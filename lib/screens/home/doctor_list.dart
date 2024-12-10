@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:masiha_user/models/doctor_details_model.dart';
+import 'package:masiha_user/screens/home/doctor_details.dart';
 
 class DoctorsListScreen extends StatelessWidget {
   final String specialty;
@@ -73,43 +74,44 @@ class DoctorsListScreen extends StatelessWidget {
                 elevation: 2,
                 margin: const EdgeInsets.symmetric(vertical: 4),
                 child: ListTile(
-                  contentPadding: const EdgeInsets.all(8),
-                  leading: doctor.imagePath != null
-                      ? CircleAvatar(
-                          radius: 30,
-                          backgroundImage: NetworkImage(doctor.imagePath!),
-                        )
-                      : const CircleAvatar(
-                          radius: 30,
-                          child: Icon(Icons.person),
-                        ),
-                  title: Text(
-                    doctor.fullName ?? 'Unknown Doctor',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                    contentPadding: const EdgeInsets.all(8),
+                    leading: doctor.imagePath != null
+                        ? CircleAvatar(
+                            radius: 30,
+                            backgroundImage: NetworkImage(doctor.imagePath!),
+                          )
+                        : const CircleAvatar(
+                            radius: 30,
+                            child: Icon(Icons.person),
+                          ),
+                    title: Text(
+                      doctor.fullName ?? 'Unknown Doctor',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 4),
-                      Text('🏥 ${doctor.hospitalName ?? 'N/A'}'),
-                      Text(
-                          '💼 ${doctor.yearOfExperience ?? 0} years experience'),
-                      if (doctor.educations?.isNotEmpty ?? false)
-                        Text('🎓 ${doctor.educations!.first.degree ?? 'N/A'}'),
-                    ],
-                  ),
-                  onTap: () {
-                    // Navigate to doctor details page
-                    Navigator.pushNamed(
-                      context,
-                      '/doctor-details',
-                      arguments: doctor,
-                    );
-                  },
-                ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 4),
+                        Text('🏥 ${doctor.hospitalName ?? 'N/A'}'),
+                        Text(
+                            '💼 ${doctor.yearOfExperience ?? 0} years experience'),
+                        if (doctor.educations?.isNotEmpty ?? false)
+                          Text(
+                              '🎓 ${doctor.educations!.first.degree ?? 'N/A'}'),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              DoctorDetailsScreen(doctor: doctor),
+                        ),
+                      );
+                    }),
               );
             },
           );

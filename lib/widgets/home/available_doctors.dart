@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:masiha_user/providers/doctor_provider.dart';
-import 'package:masiha_user/screens/home/doctor_list_dummy.dart';
+import 'package:masiha_user/screens/home/doctor_details.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -98,14 +98,12 @@ class _AvailableDoctorsSectionState extends State<AvailableDoctorsSection> {
                         elevation: 2,
                         child: InkWell(
                           onTap: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => DoctorDetailsScreen(
-                            //       doctorId: doctor.requestId ?? '',
-                            //     ),
-                            //   ),
-                            // );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      DoctorDetailsScreen(doctor: doctor)),
+                            );
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(12.0),
