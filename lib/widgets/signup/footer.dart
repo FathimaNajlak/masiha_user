@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:masiha_user/screens/login_signup/login_screen.dart';
 
-class LoginRedirect extends StatelessWidget {
-  const LoginRedirect({super.key});
+class SignUpFooter extends StatelessWidget {
+  const SignUpFooter({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,11 +12,7 @@ class LoginRedirect extends StatelessWidget {
         const SizedBox(width: 5),
         GestureDetector(
           onTap: () {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => const LoginPage()),
-              (route) => false,
-            );
+            Navigator.pushReplacementNamed(context, "/login");
           },
           child: const Text(
             "Login",
