@@ -1,66 +1,65 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:masiha_user/widgets/form_container.dart';
 
 import 'package:masiha_user/services/firebase_auth_service.dart';
+import 'package:masiha_user/widgets/login/google_sign_in.dart';
 import 'package:masiha_user/widgets/costum_button.dart';
 import 'package:masiha_user/widgets/signup/validation_logics.dart';
 
-class SignUpForm extends StatefulWidget {
-  const SignUpForm({super.key});
+class LoginForm extends StatefulWidget {
+  const LoginForm({super.key});
 
   @override
-  State<SignUpForm> createState() => _SignUpFormState();
+  State<LoginForm> createState() => _LoginFormState();
 }
 
-class _SignUpFormState extends State<SignUpForm> {
+class _LoginFormState extends State<LoginForm> {
   final FirebaseAuthService _auth = FirebaseAuthService();
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  bool isSigningUp = false;
+  bool _isSigning = false;
 
   @override
   void dispose() {
-    _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
-  Future<void> _signUp() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
+  Future<void> _handleLogin() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() => _isSigning = true);
 
-    setState(() {
-      isSigningUp = true;
-    });
+      try {
+        User? user = await _auth.signInWithEmailAndPassword(
+          _emailController.text.trim(),
+          _passwordController.text.trim(),
+        );
+
+        if (user != null && mounted) {
+          Navigator.pushReplacementNamed(context, '/addDetails');
+        }
+      } finally {
+        if (mounted) setState(() => _isSigning = false);
+      }
+    }
+  }
+
+  Future<void> _handleGoogleSignIn() async {
+    setState(() => _isSigning = true);
 
     try {
-      await _auth.signUpWithEmailAndPassword(
-        _emailController.text,
-        _passwordController.text,
-      );
+      User? user = await _auth.signInWithGoogle();
 
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("User is successfully created")),
-        );
-        Navigator.pushNamed(context, "/addDetails");
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error: ${e.toString()}")),
-        );
+      if (user != null && mounted) {
+        Navigator.pushReplacementNamed(context, '/addDetails');
       }
     } finally {
-      setState(() {
-        isSigningUp = false;
-      });
+      if (mounted) setState(() => _isSigning = false);
     }
   }
 
@@ -70,13 +69,6 @@ class _SignUpFormState extends State<SignUpForm> {
       key: _formKey,
       child: Column(
         children: [
-          FormContainerWidget(
-            controller: _usernameController,
-            hintText: "Username",
-            isPasswordField: false,
-            validator: ValidationUtil.validateUsername,
-          ),
-          const SizedBox(height: 10),
           FormContainerWidget(
             controller: _emailController,
             hintText: "Email",
@@ -93,9 +85,14 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
           const SizedBox(height: 30),
           CustomButton(
-            text: "Sign Up",
-            isLoading: isSigningUp,
-            onTap: _signUp,
+            text: "Log In",
+            isLoading: _isSigning,
+            onTap: _handleLogin,
+          ),
+          const SizedBox(height: 10),
+          SocialSignInButton(
+            onPressed: _handleGoogleSignIn,
+            isLoading: _isSigning,
           ),
         ],
       ),
