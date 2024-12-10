@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:masiha_user/models/doctor_details_model.dart';
+import 'package:masiha_user/screens/home/doctor_details.dart';
 import 'package:masiha_user/widgets/home/search_delegate.dart';
 
 class DoctorSearchBar extends StatelessWidget {
@@ -16,10 +17,13 @@ class DoctorSearchBar extends StatelessWidget {
 
         if (selectedDoctor != null && context.mounted) {
           // Navigate to doctor details page
-          Navigator.pushNamed(
+          Navigator.push(
             context,
-            '/doctor-details',
-            arguments: selectedDoctor,
+            MaterialPageRoute(
+              builder: (context) => DoctorDetailsScreen(
+                doctor: selectedDoctor, // Use the correct variable
+              ),
+            ),
           );
         }
       },

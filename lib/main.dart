@@ -17,6 +17,7 @@ import 'package:masiha_user/screens/login_signup/signup_screen.dart';
 import 'package:masiha_user/screens/onboards/onboard1/onboard1.dart';
 import 'package:masiha_user/screens/onboards/onboard2/onboard2.dart';
 import 'package:masiha_user/screens/onboards/onboard3/onboard3.dart';
+import 'package:masiha_user/screens/profile_screen.dart';
 import 'package:masiha_user/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
         '/allset': (context) => const AllSetScreen(),
         '/home': (context) => const HomeScreen(),
         '/addDetails': (context) => const UserDetailsPage(),
+        '/profile': (context) => const ProfileScreen(),
         //'/setpass': (context) => const SetPasswordScreen(),
         // '/pass': (context) =>  CreatePasswordScreen(email: RegistrationProvider._email,),
       },

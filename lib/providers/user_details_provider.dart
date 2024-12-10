@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:masiha_user/models/user_model.dart';
 import 'package:path/path.dart' as path;
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,12 +9,18 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
 class UserDetailsProvider extends ChangeNotifier {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  String? _currentUserDocId;
   final UserModel _user = UserModel();
   File? _imageFile;
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   String? _imageError;
   final List<File> _certificateFiles = [];
+
+  UserModel? _currentUserDetails;
+  UserModel? get currentUserDetails => _currentUserDetails;
 
   // Getters
   UserModel get user => _user;
@@ -22,6 +29,52 @@ class UserDetailsProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get imageError => _imageError;
   List<File> get certificateFiles => _certificateFiles;
+
+  Future<void> fetchLatestUserDetails() async {
+    try {
+      // Get the currently logged-in user
+      User? currentUser = _auth.currentUser;
+
+      if (currentUser == null) {
+        print('No authenticated user found');
+        _currentUserDetails = null;
+        notifyListeners();
+        return;
+      }
+
+      // Fetch user document using the UID
+      DocumentSnapshot userDoc =
+          await _firestore.collection('users').doc(currentUser.uid).get();
+
+      if (userDoc.exists) {
+        // Convert Firestore document to UserModel
+        Map<String, dynamic>? userData =
+            userDoc.data() as Map<String, dynamic>?;
+
+        if (userData != null) {
+          _currentUserDetails = UserModel.fromJson({
+            ...userData,
+            'id': userDoc.id, // Add document ID to the data
+          });
+
+          notifyListeners();
+        } else {
+          print('User data is null');
+          _currentUserDetails = null;
+          notifyListeners();
+        }
+      } else {
+        print('No user document found');
+        _currentUserDetails = null;
+        notifyListeners();
+      }
+    } catch (e) {
+      print('Error fetching user details: $e');
+      _currentUserDetails = null;
+      notifyListeners();
+      rethrow;
+    }
+  }
 
   // Validation Methods
   String? validateName(String? value) {
@@ -114,42 +167,82 @@ class UserDetailsProvider extends ChangeNotifier {
 
   // Main Validation and Save Method
   Future<bool> validateAndSave() async {
-    // Reset any previous errors
     _imageError = _imageFile == null ? 'Profile image is required' : null;
 
-    // Validate all required fields
     if (!_formKey.currentState!.validate()) {
       notifyListeners();
       return false;
     }
 
-    // Validate non-form fields
     if (_imageFile == null) {
       _imageError = 'Profile image is required';
       notifyListeners();
       return false;
     }
 
-    // If all validation passes, proceed with saving
     _formKey.currentState!.save();
     setLoadingState(true);
 
     try {
-      // Upload profile image to Supabase
       if (_imageFile != null) {
         final imageUrl = await saveImageLocally(_imageFile!);
-        _user.imagePath = imageUrl; // Store the public URL
+        _user.imagePath = imageUrl;
       }
 
-      // Similar modification for certificates
+      // Create user data with timestamp
+      final userData = {
+        ..._user.toJson(),
+        'timestamp': FieldValue.serverTimestamp(),
+      };
 
-      // Rest of your existing save logic
-      await saveToFirestore('users', _user.toJson());
+      // Add new document with auto-generated ID
+      DocumentReference docRef =
+          await _firestore.collection('users').add(userData);
 
+      _currentUserDocId = docRef.id; // Store the new document ID
+
+      // Update current user details after saving
+      _currentUserDetails = UserModel(
+        fullName: _user.fullName,
+        age: _user.age,
+        dateOfBirth: _user.dateOfBirth,
+        email: _user.email,
+        gender: _user.gender,
+        imagePath: _user.imagePath,
+      );
+
+      notifyListeners();
+      setLoadingState(false);
       return true;
     } catch (e) {
       setLoadingState(false);
       throw Exception('Failed to save user details: $e');
+    }
+  }
+
+  Future<bool> updateUserDetails(UserModel updatedUser) async {
+    if (_currentUserDocId == null) return false;
+
+    try {
+      setLoadingState(true);
+
+      final userData = {
+        ...updatedUser.toJson(),
+        'timestamp': FieldValue.serverTimestamp(),
+      };
+
+      await _firestore
+          .collection('users')
+          .doc(_currentUserDocId)
+          .update(userData);
+
+      _currentUserDetails = updatedUser;
+      notifyListeners();
+      setLoadingState(false);
+      return true;
+    } catch (e) {
+      setLoadingState(false);
+      throw Exception('Failed to update user details: $e');
     }
   }
 
