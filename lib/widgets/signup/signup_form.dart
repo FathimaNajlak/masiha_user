@@ -3,7 +3,7 @@ import 'package:masiha_user/widgets/form_container.dart';
 
 import 'package:masiha_user/services/firebase_auth_service.dart';
 import 'package:masiha_user/widgets/costum_button.dart';
-import 'package:masiha_user/widgets/signup/validation_logics.dart';
+import 'package:masiha_user/widgets/utils/validation_logics.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({super.key});

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:masiha_user/widgets/signup/footer.dart';
 import 'package:masiha_user/widgets/signup/header.dart';
 import 'package:masiha_user/widgets/signup/signup_form.dart';
@@ -20,11 +19,11 @@ class SignUpPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SignUpHeader(), // Header Section
+                SignUpHeader(),
                 SizedBox(height: 30),
-                SignUpForm(), // Form Section
+                SignUpForm(),
                 SizedBox(height: 30),
-                SignUpFooter(), // Footer Section
+                SignUpFooter(),
               ],
             ),
           ),

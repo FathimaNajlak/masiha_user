@@ -22,7 +22,6 @@ class LoginPage extends StatelessWidget {
               LoginForm(),
               ForgotPasswordButton(),
               SizedBox(height: 20),
-              SizedBox(height: 20),
               SignUpPrompt(),
             ],
           ),

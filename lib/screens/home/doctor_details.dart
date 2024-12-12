@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:masiha_user/consts/colors.dart';
 import 'package:masiha_user/models/doctor_details_model.dart';
-import 'package:masiha_user/widgets/doctor_detials/cards/about_doctor_card.dart';
 import 'package:masiha_user/widgets/doctor_detials/availability_card.dart';
-import 'package:masiha_user/widgets/doctor_detials/cards/doctor_profile_card.dart';
 import 'package:masiha_user/widgets/doctor_detials/doctorprofilewithbio.dart';
 import 'package:masiha_user/widgets/doctor_detials/experience_education_card.dart';
 
@@ -48,8 +46,7 @@ class DoctorDetailsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Dr. ${doctor.fullName}'),
-        backgroundColor:
-            Colors.transparent, // Ensure AppBar blends with gradient
+        backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       body: FutureBuilder<Map<String, dynamic>?>(
@@ -69,7 +66,7 @@ class DoctorDetailsScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // // Profile Card
+                  // Profile Card
                   // DoctorProfileCard(doctor: doctor),
 
                   // About Doctor
@@ -109,7 +106,7 @@ class DoctorDetailsScreen extends StatelessWidget {
                         ),
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         side: const BorderSide(
-                          color: AppColors.darkcolor, // Deep Blue Border
+                          color: AppColors.darkcolor,
                           width: 2,
                         ),
                       ),
@@ -118,7 +115,7 @@ class DoctorDetailsScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.darkcolor, // Deep Blue Text
+                          color: AppColors.darkcolor,
                         ),
                       ),
                     ),

@@ -12,7 +12,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Access doctors list from DoctorProvider
     final doctorProvider = Provider.of<DoctorProvider>(context);
     final doctors = doctorProvider.doctors;
 
@@ -25,14 +24,13 @@ class HomeScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const UserHeader(),
-                const SizedBox(height: 16),
+                const SizedBox(height: 24),
                 const DoctorSearchBar(),
                 const SizedBox(height: 24),
                 const CategorySection(),
                 const SizedBox(height: 24),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height *
-                      0.4, // Limited height
+                  height: MediaQuery.of(context).size.height * 0.4,
                   child: const AvailableDoctorsSection(),
                 ),
               ],
