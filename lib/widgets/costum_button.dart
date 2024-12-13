@@ -1,35 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:masiha_user/consts/colors.dart';
 
-class PrimaryButton extends StatelessWidget {
-  final String label;
-  final VoidCallback onPressed;
+class CustomButton extends StatelessWidget {
+  final String text;
   final bool isLoading;
-  final Color color;
+  final VoidCallback? onTap;
 
-  const PrimaryButton({
-    super.key,
-    required this.label,
-    required this.onPressed,
+  const CustomButton({
+    required this.text,
     this.isLoading = false,
-    this.color = Colors.blue,
+    this.onTap,
+    super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: isLoading ? null : onPressed,
+      onTap: isLoading ? null : onTap,
       child: Container(
         width: double.infinity,
         height: 45,
         decoration: BoxDecoration(
-          color: isLoading ? Colors.grey : color,
+          color: AppColors.darkcolor, // Replace with your AppColors.darkcolor
           borderRadius: BorderRadius.circular(10),
         ),
         child: Center(
           child: isLoading
               ? const CircularProgressIndicator(color: Colors.white)
               : Text(
-                  label,
+                  text,
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,

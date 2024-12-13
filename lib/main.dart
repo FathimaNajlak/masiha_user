@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:masiha_user/firebase_options.dart';
 import 'package:masiha_user/providers/doctor_provider.dart';
 import 'package:masiha_user/providers/forgot_password_provider.dart';
-import 'package:masiha_user/providers/login_screen_provider.dart';
 import 'package:masiha_user/providers/onboarding_provider.dart';
-import 'package:masiha_user/providers/signup_provider.dart';
 import 'package:masiha_user/providers/user_details_provider.dart';
 import 'package:masiha_user/screens/add_details.dart';
+import 'package:masiha_user/screens/home/favourites_screen.dart';
 import 'package:masiha_user/screens/home/home.dart';
 import 'package:masiha_user/screens/login_signup/all_set.dart';
 import 'package:masiha_user/screens/login_signup/forgot_password.dart';
@@ -29,10 +28,8 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => LoginProvider()),
         ChangeNotifierProvider(create: (_) => OnboardingProvider()),
         ChangeNotifierProvider(create: (_) => ForgotPasswordProvider()),
-        ChangeNotifierProvider(create: (_) => SignupProvider()),
         ChangeNotifierProvider(create: (_) => DoctorProvider()),
         ChangeNotifierProvider(create: (_) => UserDetailsProvider()),
       ],
@@ -60,8 +57,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(),
         '/addDetails': (context) => const UserDetailsPage(),
         '/profile': (context) => const ProfileScreen(),
-        //'/setpass': (context) => const SetPasswordScreen(),
-        // '/pass': (context) =>  CreatePasswordScreen(email: RegistrationProvider._email,),
+        '/favorite': (context) => const FavoriteDoctorsScreen(),
       },
       theme: ThemeData(
         primarySwatch: Colors.blue,

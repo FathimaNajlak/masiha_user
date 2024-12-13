@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:masiha_user/consts/colors.dart';
 import 'package:masiha_user/models/doctor_details_model.dart';
-import 'package:masiha_user/widgets/doctor_detials/cards/about_doctor_card.dart';
 import 'package:masiha_user/widgets/doctor_detials/availability_card.dart';
-import 'package:masiha_user/widgets/doctor_detials/cards/doctor_profile_card.dart';
+import 'package:masiha_user/widgets/doctor_detials/cards/consultation_fee_card.dart';
 import 'package:masiha_user/widgets/doctor_detials/doctorprofilewithbio.dart';
 import 'package:masiha_user/widgets/doctor_detials/experience_education_card.dart';
 
@@ -48,8 +47,7 @@ class DoctorDetailsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Dr. ${doctor.fullName}'),
-        backgroundColor:
-            Colors.transparent, // Ensure AppBar blends with gradient
+        backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       body: FutureBuilder<Map<String, dynamic>?>(
@@ -60,48 +58,55 @@ class DoctorDetailsScreen extends StatelessWidget {
           }
 
           final additionalDetails = snapshot.data;
+          final consultationFee =
+              additionalDetails?['consultationFee']?.toDouble();
 
           return Container(
-            decoration:
-                const BoxDecoration(color: Color.fromARGB(255, 236, 250, 255)),
+            decoration: const BoxDecoration(
+              color: Color.fromARGB(255, 236, 250, 255),
+            ),
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // // Profile Card
-                  // DoctorProfileCard(doctor: doctor),
-
-                  // About Doctor
                   if (additionalDetails?['bio'] != null)
-                    // AboutDoctorCard(bio: additionalDetails?['bio']),
                     DoctorProfileWithBioCard(
-                        doctor: doctor, bio: additionalDetails?['bio']),
+                      doctor: doctor,
+                      bio: additionalDetails?['bio'],
+                    ),
                   const SizedBox(height: 24),
 
-                  // Experience and Education
                   ExperienceEducationCard(doctor: doctor),
-                  const SizedBox(height: 16),
 
-                  // Availability
                   if (additionalDetails?['availability'] != null)
                     Center(
                       child: AvailabilityCard(
-                          availability: additionalDetails?['availability']),
+                        availability: additionalDetails?['availability'],
+                      ),
                     ),
+                  const SizedBox(height: 16),
+
+                  // Consultation Fee Card
+                  if (consultationFee != null)
+                    ConsultationFeeCard(consultationFee: consultationFee),
                   const SizedBox(height: 32),
 
-                  // Book Appointment Button
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          '/book-appointment',
-                          arguments: doctor,
-                        );
-                      },
+                      onPressed: consultationFee != null
+                          ? () {
+                              Navigator.pushNamed(
+                                context,
+                                '/book-appointment',
+                                arguments: {
+                                  'doctor': doctor,
+                                  'consultationFee': consultationFee,
+                                },
+                              );
+                            }
+                          : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
@@ -109,16 +114,18 @@ class DoctorDetailsScreen extends StatelessWidget {
                         ),
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         side: const BorderSide(
-                          color: AppColors.darkcolor, // Deep Blue Border
+                          color: AppColors.darkcolor,
                           width: 2,
                         ),
                       ),
-                      child: const Text(
-                        'Book Appointment',
-                        style: TextStyle(
+                      child: Text(
+                        consultationFee != null
+                            ? 'Book Appointment'
+                            : 'Consultation fee not set',
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.darkcolor, // Deep Blue Text
+                          color: AppColors.darkcolor,
                         ),
                       ),
                     ),

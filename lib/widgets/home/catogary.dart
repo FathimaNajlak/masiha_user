@@ -1,81 +1,8 @@
-// import 'package:flutter/material.dart';
-// import 'package:masiha_user/consts/colors.dart';
-
-// class CategorySection extends StatelessWidget {
-//   const CategorySection({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//           children: [
-//             const Text(
-//               'Category',
-//               style: TextStyle(
-//                 fontSize: 18,
-//                 fontWeight: FontWeight.bold,
-//               ),
-//             ),
-//             TextButton(
-//               onPressed: () {},
-//               child: const Text('See All'),
-//             ),
-//           ],
-//         ),
-//         const SizedBox(height: 16),
-//         Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceAround,
-//           children: [
-//             _buildCategoryItem(Icons.home, 'General', AppColors.darkcolor),
-//             _buildCategoryItem(
-//                 Icons.medical_services, 'Dentist', AppColors.darkcolor),
-//             _buildCategoryItem(
-//                 Icons.remove_red_eye, 'Ophthal', AppColors.darkcolor),
-//             _buildCategoryItem(Icons.psychology, 'Neuro', AppColors.darkcolor),
-//           ],
-//         ),
-//         const SizedBox(height: 16),
-//         Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceAround,
-//           children: [
-//             _buildCategoryItem(
-//                 Icons.restaurant_menu, 'Nutrition', AppColors.darkcolor),
-//             _buildCategoryItem(
-//                 Icons.child_care, 'Pediatric', AppColors.darkcolor),
-//             _buildCategoryItem(Icons.healing, 'nephro', AppColors.darkcolor),
-//             _buildCategoryItem(Icons.more_horiz, 'More', AppColors.darkcolor),
-//           ],
-//         ),
-//       ],
-//     );
-//   }
-
-//   Widget _buildCategoryItem(IconData icon, String label, Color color) {
-//     return Column(
-//       children: [
-//         Container(
-//           padding: const EdgeInsets.all(12),
-//           decoration: BoxDecoration(
-//             color: color.withOpacity(0.1),
-//             borderRadius: BorderRadius.circular(12),
-//           ),
-//           child: Icon(icon, color: color),
-//         ),
-//         const SizedBox(height: 8),
-//         Text(
-//           label,
-//           style: const TextStyle(fontSize: 12),
-//         ),
-//       ],
-//     );
-//   }
-// }
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:masiha_user/consts/colors.dart';
-import 'package:masiha_user/screens/home/doctor_list.dart'; // Ensure you have this import
+import 'package:masiha_user/screens/home/doctor_list.dart';
+import 'package:masiha_user/models/doctor_details_model.dart';
 
 class CategorySection extends StatelessWidget {
   const CategorySection({super.key});
@@ -84,15 +11,11 @@ class CategorySection extends StatelessWidget {
   Widget build(BuildContext context) {
     // List of categories with their corresponding icons and specialties
     final categories = [
-      {
-        'icon': Icons.home,
-        'label': 'General',
-        'specialty': 'General Physician'
-      },
+      {'icon': Icons.home, 'label': 'General', 'specialty': 'General Practice'},
       {
         'icon': Icons.medical_services,
         'label': 'Dentist',
-        'specialty': 'dental'
+        'specialty': 'General Dentistry'
       },
       {
         'icon': Icons.remove_red_eye,
@@ -103,7 +26,7 @@ class CategorySection extends StatelessWidget {
       {
         'icon': Icons.restaurant_menu,
         'label': 'Nutrition',
-        'specialty': 'Nutrition'
+        'specialty': 'Endocrinology'
       },
       {
         'icon': Icons.child_care,
@@ -128,8 +51,7 @@ class CategorySection extends StatelessWidget {
               ),
             ),
             TextButton(
-              onPressed:
-                  () {}, // You can implement a "see all" functionality if needed
+              onPressed: () {},
               child: const Text('See All'),
             ),
           ],
@@ -167,19 +89,30 @@ class CategorySection extends StatelessWidget {
     required String specialty,
     required Color color,
   }) {
-    final categories = [
-      {'icon': icon, 'label': label, 'specialty': specialty}
-    ]; // Pass relevant categories if needed
-
     return GestureDetector(
-      onTap: () {
-        // Navigate to doctors list screen with the selected specialty and categories
+      onTap: () async {
+        // Fetch doctors for the selected specialty
+        final doctorsSnapshot = await FirebaseFirestore.instance
+            .collection('doctorRequests')
+            .where('requestStatus', isEqualTo: 'approved')
+            .where('specialty', isEqualTo: specialty)
+            .get();
+
+        // Convert snapshot to list of DoctorDetailsModel
+        final doctors = doctorsSnapshot.docs.map((doc) {
+          final data = doc.data();
+          return DoctorDetailsModel.fromJson(data)..requestId = doc.id;
+        }).toList();
+
+        // Navigate to doctors list screen with fetched doctors
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => DoctorsListScreen(
               specialty: specialty,
-              categories: categories, // Pass the categories list
+              categories: [
+                {'specialty': specialty}
+              ], // Pass categories as expected by the screen
             ),
           ),
         );
