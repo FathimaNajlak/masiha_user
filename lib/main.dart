@@ -6,6 +6,7 @@ import 'package:masiha_user/providers/forgot_password_provider.dart';
 import 'package:masiha_user/providers/onboarding_provider.dart';
 import 'package:masiha_user/providers/user_details_provider.dart';
 import 'package:masiha_user/screens/add_details.dart';
+import 'package:masiha_user/screens/home/favourites_screen.dart';
 import 'package:masiha_user/screens/home/home.dart';
 import 'package:masiha_user/screens/login_signup/all_set.dart';
 import 'package:masiha_user/screens/login_signup/forgot_password.dart';
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(),
         '/addDetails': (context) => const UserDetailsPage(),
         '/profile': (context) => const ProfileScreen(),
+        '/favorite': (context) => const FavoriteDoctorsScreen(),
       },
       theme: ThemeData(
         primarySwatch: Colors.blue,

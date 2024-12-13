@@ -59,6 +59,7 @@ class DoctorDetailsModel {
   List<Education>? educations;
   String? requestId;
   RequestStatus requestStatus = RequestStatus.pending;
+  bool isFavorite = false;
 
   DoctorDetailsModel({
     this.fullName,
@@ -121,6 +122,7 @@ class DoctorDetailsModel {
       //     : null,
       // consultationFees: json['consultationFees'],
       imagePath: json['imagePath'],
+
       educations: json['educations'] != null
           ? (json['educations'] as List)
               .map((e) => Education(
