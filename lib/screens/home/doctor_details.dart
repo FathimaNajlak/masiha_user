@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:masiha_user/consts/colors.dart';
 import 'package:masiha_user/models/doctor_details_model.dart';
+import 'package:masiha_user/screens/home/booking_screen.dart';
 import 'package:masiha_user/widgets/doctor_detials/availability_card.dart';
 import 'package:masiha_user/widgets/doctor_detials/cards/consultation_fee_card.dart';
 import 'package:masiha_user/widgets/doctor_detials/doctorprofilewithbio.dart';
@@ -97,13 +98,12 @@ class DoctorDetailsScreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: consultationFee != null
                           ? () {
-                              Navigator.pushNamed(
+                              Navigator.push(
                                 context,
-                                '/book-appointment',
-                                arguments: {
-                                  'doctor': doctor,
-                                  'consultationFee': consultationFee,
-                                },
+                                MaterialPageRoute(
+                                    builder: (context) => BookingScreen(
+                                        doctor: doctor) // Pass doctor
+                                    ),
                               );
                             }
                           : null,

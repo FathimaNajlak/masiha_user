@@ -43,6 +43,8 @@ extension RequestStatusExtension on RequestStatus {
 }
 
 class DoctorDetailsModel {
+  String? id; // Add the ID property
+
   String? fullName;
   int? age;
   DateTime? dateOfBirth;
@@ -54,7 +56,7 @@ class DoctorDetailsModel {
   // List<String>? availableDays;
   // DateTime? workingTimeStart;
   // DateTime? workingTimeEnd;
-  // double? consultationFees;
+  double? consultationFees;
   String? imagePath;
   List<Education>? educations;
   String? requestId;
@@ -62,6 +64,7 @@ class DoctorDetailsModel {
   bool isFavorite = false;
 
   DoctorDetailsModel({
+    this.id,
     this.fullName,
     this.age,
     this.dateOfBirth,
@@ -73,13 +76,14 @@ class DoctorDetailsModel {
     // this.availableDays,
     // this.workingTimeStart,
     // this.workingTimeEnd,
-    // this.consultationFees,
+    this.consultationFees,
     this.imagePath,
     this.educations,
   });
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'fullName': fullName,
       'age': age,
       'dateOfBirth': dateOfBirth?.toIso8601String(),
@@ -91,7 +95,7 @@ class DoctorDetailsModel {
       // 'availableDays': availableDays,
       // 'workingTimeStart': workingTimeStart?.toIso8601String(),
       // 'workingTimeEnd': workingTimeEnd?.toIso8601String(),
-      // 'consultationFees': consultationFees,
+      'consultationFees': consultationFees,
       'imagePath': imagePath,
       'educations': educations?.map((e) => e.toJson()).toList(),
       'requestId': requestId,
@@ -101,6 +105,7 @@ class DoctorDetailsModel {
 
   factory DoctorDetailsModel.fromJson(Map<String, dynamic> json) {
     return DoctorDetailsModel(
+      id: json['id'],
       fullName: json['fullName'],
       age: json['age'],
       dateOfBirth: json['dateOfBirth'] != null
@@ -120,7 +125,7 @@ class DoctorDetailsModel {
       // workingTimeEnd: json['workingTimeEnd'] != null
       //     ? DateTime.parse(json['workingTimeEnd'])
       //     : null,
-      // consultationFees: json['consultationFees'],
+      consultationFees: json['consultationFees'],
       imagePath: json['imagePath'],
 
       educations: json['educations'] != null

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:masiha_user/providers/doctor_provider.dart';
 import 'package:masiha_user/widgets/home/bottom_nav_bar.dart';
-import 'package:masiha_user/widgets/home/catogary.dart';
+import 'package:masiha_user/screens/home/catogary.dart';
 import 'package:masiha_user/widgets/home/header.dart';
 import 'package:masiha_user/screens/home/top_doctors.dart';
 import 'package:masiha_user/widgets/home/search_bar.dart';
