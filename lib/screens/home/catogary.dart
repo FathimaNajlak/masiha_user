@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:masiha_user/consts/colors.dart';
+import 'package:masiha_user/screens/home/all_catogary.dart';
 import 'package:masiha_user/screens/home/doctor_list.dart';
 import 'package:masiha_user/models/doctor_details_model.dart';
 
@@ -40,19 +41,15 @@ class CategorySection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
+        const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
+            Text(
               'Category',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
-            ),
-            TextButton(
-              onPressed: () {},
-              child: const Text('See All'),
             ),
           ],
         ),
@@ -90,32 +87,41 @@ class CategorySection extends StatelessWidget {
     required Color color,
   }) {
     return GestureDetector(
-      onTap: () async {
-        // Fetch doctors for the selected specialty
-        final doctorsSnapshot = await FirebaseFirestore.instance
-            .collection('doctorRequests')
-            .where('requestStatus', isEqualTo: 'approved')
-            .where('specialty', isEqualTo: specialty)
-            .get();
-
-        // Convert snapshot to list of DoctorDetailsModel
-        final doctors = doctorsSnapshot.docs.map((doc) {
-          final data = doc.data();
-          return DoctorDetailsModel.fromJson(data)..requestId = doc.id;
-        }).toList();
-
-        // Navigate to doctors list screen with fetched doctors
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DoctorsListScreen(
-              specialty: specialty,
-              categories: [
-                {'specialty': specialty}
-              ], // Pass categories as expected by the screen
+      onTap: () {
+        if (label == 'More') {
+          // Navigate to AllCategoriesScreen when 'More' is clicked
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AllCategoriesScreen(),
             ),
-          ),
-        );
+          );
+        } else {
+          // Existing logic for other categories
+          FirebaseFirestore.instance
+              .collection('doctorRequests')
+              .where('requestStatus', isEqualTo: 'approved')
+              .where('specialty', isEqualTo: specialty)
+              .get()
+              .then((doctorsSnapshot) {
+            final doctors = doctorsSnapshot.docs.map((doc) {
+              final data = doc.data();
+              return DoctorDetailsModel.fromJson(data)..requestId = doc.id;
+            }).toList();
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DoctorsListScreen(
+                  specialty: specialty,
+                  categories: [
+                    {'specialty': specialty}
+                  ],
+                ),
+              ),
+            );
+          });
+        }
       },
       child: Column(
         children: [

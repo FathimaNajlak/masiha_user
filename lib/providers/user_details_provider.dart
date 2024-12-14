@@ -163,8 +163,6 @@ class UserDetailsProvider extends ChangeNotifier {
     }
   }
 
-  // Education Methods
-
   // Main Validation and Save Method
   Future<bool> validateAndSave() async {
     _imageError = _imageFile == null ? 'Profile image is required' : null;
