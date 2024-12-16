@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:masiha_user/firebase_options.dart';
+import 'package:masiha_user/providers/doctor_details_provider.dart';
 import 'package:masiha_user/providers/doctor_provider.dart';
 import 'package:masiha_user/providers/forgot_password_provider.dart';
 import 'package:masiha_user/providers/onboarding_provider.dart';
@@ -32,6 +33,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ForgotPasswordProvider()),
         ChangeNotifierProvider(create: (_) => DoctorProvider()),
         ChangeNotifierProvider(create: (_) => UserDetailsProvider()),
+        ChangeNotifierProvider(create: (_) => DoctorDetailsProvider()),
       ],
       child: const MyApp(),
     ),
