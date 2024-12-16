@@ -2,16 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:masiha_user/consts/colors.dart';
 
 class ConsultationFeeCard extends StatelessWidget {
-  final double? consultationFee;
+  final Map<String, dynamic> profile;
 
   const ConsultationFeeCard({
     super.key,
-    required this.consultationFee,
+    required this.profile,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (consultationFee == null) return const SizedBox.shrink();
+    // Extract consultation fee, defaulting to 0 if not found
+    final double consultationFee = profile['consultationFee'] ?? 0.0;
+
+    // If consultation fee is zero or null, return an empty widget
+    if (consultationFee <= 0) return const SizedBox.shrink();
 
     return Card(
       elevation: 2,
@@ -43,7 +47,7 @@ class ConsultationFeeCard extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              '\$${consultationFee!.toStringAsFixed(2)}',
+              '₹${consultationFee.toStringAsFixed(0)}',
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
