@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:masiha_user/models/doctor_details_model.dart';
-import 'package:masiha_user/screens/appointment_confirmation.dart';
+import 'package:masiha_user/screens/booking/appointment_confirmation.dart';
 
 class PatientDetails {
   String name;

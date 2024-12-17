@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:masiha_user/consts/colors.dart';
 import 'package:masiha_user/models/doctor_details_model.dart';
 import 'package:masiha_user/providers/booking_provider.dart';
+import 'package:masiha_user/screens/booking/payment_confirmation_screen.dart';
+import 'package:masiha_user/services/stripe_service.dart';
 
 class AppointmentConfirmationScreen extends StatelessWidget {
   final DoctorDetailsModel doctor;
@@ -51,7 +53,9 @@ class AppointmentConfirmationScreen extends StatelessWidget {
               const SizedBox(height: 30),
 
               // Confirm Button
-              _buildConfirmButton(context),
+              _buildConfirmButton(
+                context,
+              ),
             ],
           ),
         ),
@@ -266,9 +270,23 @@ class AppointmentConfirmationScreen extends StatelessWidget {
 
   Widget _buildConfirmButton(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
-        // TODO: Implement final booking confirmation or navigation
-        Navigator.popUntil(context, (route) => route.isFirst);
+      onPressed: () async {
+        try {
+          // Attempt to make payment
+          await StripeService.instance.makePayement();
+
+          // Navigate to confirmation screen only if payment is successful
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const PaymentConfirmationScreen()),
+          );
+        } catch (e) {
+          // Optionally handle any payment errors
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Payment failed: $e')),
+          );
+        }
       },
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.white,
