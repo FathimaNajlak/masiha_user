@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:masiha_user/firebase_options.dart';
+import 'package:masiha_user/providers/booking_provider.dart';
 import 'package:masiha_user/providers/doctor_details_provider.dart';
 import 'package:masiha_user/providers/doctor_provider.dart';
 import 'package:masiha_user/providers/forgot_password_provider.dart';
