@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:masiha_user/consts/colors.dart';
 import 'package:masiha_user/models/doctor_details_model.dart';
 import 'package:masiha_user/providers/doctor_details_provider.dart';
-import 'package:masiha_user/screens/booking_screen.dart';
+import 'package:masiha_user/screens/booking/availability_screen.dart';
 import 'package:masiha_user/widgets/doctor_detials/cards/availability_card.dart';
 import 'package:masiha_user/widgets/doctor_detials/cards/consultation_fee_card.dart';
 import 'package:masiha_user/widgets/doctor_detials/doctorprofilewithbio.dart';
@@ -101,7 +101,7 @@ class DoctorDetailsScreen extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            BookingScreen(doctor: doctor),
+                                            AvialabilityScreen(doctor: doctor),
                                       ),
                                     );
                                   }
