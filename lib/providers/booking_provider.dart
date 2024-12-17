@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:masiha_user/models/doctor_details_model.dart';
-import 'package:masiha_user/screens/booking_form.dart';
 import 'package:masiha_user/screens/appointment_confirmation.dart';
 
 class PatientDetails {
@@ -251,6 +250,7 @@ class BookingProvider with ChangeNotifier {
               doctor: doctor,
               appointmentDate: _selectedDate!,
               appointmentTime: _selectedTimeSlot!,
+              patientDetails: _patientDetails!, // Ensure this is passed
             ),
           ),
         );

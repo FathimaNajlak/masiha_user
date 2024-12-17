@@ -5,27 +5,27 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:masiha_user/consts/colors.dart';
 import 'package:masiha_user/models/doctor_details_model.dart';
-import 'package:masiha_user/screens/booking_form.dart';
-import 'package:provider/provider.dart';
 import 'package:masiha_user/providers/booking_provider.dart';
 
 class AppointmentConfirmationScreen extends StatelessWidget {
   final DoctorDetailsModel doctor;
   final DateTime appointmentDate;
   final String appointmentTime;
+  final PatientDetails patientDetails;
 
   const AppointmentConfirmationScreen({
     super.key,
     required this.doctor,
     required this.appointmentDate,
     required this.appointmentTime,
+    required this.patientDetails,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Confirm Appointment'),
+        title: const Text('Appointment Confirmation'),
         centerTitle: true,
         elevation: 0,
       ),
@@ -37,6 +37,11 @@ class AppointmentConfirmationScreen extends StatelessWidget {
             children: [
               // Doctor Profile Card
               _buildDoctorProfileCard(context),
+
+              const SizedBox(height: 20),
+
+              // Patient Details Card
+              _buildPatientDetailsCard(context),
 
               const SizedBox(height: 20),
 
@@ -62,62 +67,119 @@ class AppointmentConfirmationScreen extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Doctor Avatar
-            CircleAvatar(
-              radius: 50,
-              backgroundColor: Colors.grey[300],
-              child: doctor.imagePath != null
-                  ? ClipOval(
-                      child: CachedNetworkImage(
-                        imageUrl: doctor.imagePath!,
-                        fit: BoxFit.cover,
-                        width: 100,
-                        height: 100,
-                        placeholder: (context, url) => const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                        errorWidget: (context, url, error) => const Icon(
-                          Icons.person,
-                          size: 50,
-                          color: Colors.white,
-                        ),
-                      ),
-                    )
-                  : const Icon(Icons.person, size: 50, color: Colors.white),
-            ),
-
-            const SizedBox(width: 16),
-
-            // Doctor Details
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    doctor.fullName ?? 'Unknown Doctor',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+            Text(
+              'Doctor Details',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.darkcolor,
                   ),
-                  const SizedBox(height: 4),
-                  if (doctor.specialty != null)
-                    Text(
-                      doctor.specialty!,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Colors.grey[600],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                // Doctor Avatar
+                CircleAvatar(
+                  radius: 40,
+                  backgroundColor: Colors.grey[300],
+                  child: doctor.imagePath != null
+                      ? ClipOval(
+                          child: CachedNetworkImage(
+                            imageUrl: doctor.imagePath!,
+                            fit: BoxFit.cover,
+                            width: 80,
+                            height: 80,
+                            placeholder: (context, url) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                            errorWidget: (context, url, error) => const Icon(
+                              Icons.person,
+                              size: 40,
+                              color: Colors.white,
+                            ),
                           ),
-                    ),
-                  if (doctor.hospitalName != null)
-                    Text(
-                      doctor.hospitalName!,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.grey[500],
-                          ),
-                    ),
-                ],
-              ),
+                        )
+                      : const Icon(Icons.person, size: 40, color: Colors.white),
+                ),
+
+                const SizedBox(width: 16),
+
+                // Doctor Details
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        doctor.fullName ?? 'Unknown Doctor',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      const SizedBox(height: 4),
+                      if (doctor.specialty != null)
+                        Text(
+                          doctor.specialty!,
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Colors.grey[600],
+                                  ),
+                        ),
+                      if (doctor.hospitalName != null)
+                        Text(
+                          doctor.hospitalName!,
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: Colors.grey[500],
+                                  ),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPatientDetailsCard(BuildContext context) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Patient Details',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.darkcolor,
+                  ),
+            ),
+            const SizedBox(height: 16),
+            _buildDetailRow(
+              icon: Icons.person,
+              title: 'Name',
+              value: patientDetails.name,
+            ),
+            const SizedBox(height: 12),
+            _buildDetailRow(
+              icon: Icons.cake,
+              title: 'Age',
+              value: '${patientDetails.age} years',
+            ),
+            const SizedBox(height: 12),
+            _buildDetailRow(
+              icon: Icons.medical_services,
+              title: 'Medical Issue',
+              value: patientDetails.issue,
             ),
           ],
         ),
@@ -136,6 +198,15 @@ class AppointmentConfirmationScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Text(
+              'Appointment Details',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: AppColors.darkcolor,
+              ),
+            ),
+            const SizedBox(height: 16),
             _buildDetailRow(
               icon: Icons.calendar_today,
               title: 'Date',
@@ -195,7 +266,10 @@ class AppointmentConfirmationScreen extends StatelessWidget {
 
   Widget _buildConfirmButton(BuildContext context) {
     return ElevatedButton(
-      onPressed: () => _confirmAppointment(context),
+      onPressed: () {
+        // TODO: Implement final booking confirmation or navigation
+        Navigator.popUntil(context, (route) => route.isFirst);
+      },
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.white,
         backgroundColor: AppColors.darkcolor,
@@ -209,29 +283,6 @@ class AppointmentConfirmationScreen extends StatelessWidget {
         ),
       ),
       child: const Text('Confirm Appointment'),
-    );
-  }
-
-  void _confirmAppointment(BuildContext context) {
-    final bookingProvider = BookingProvider(doctor);
-    bookingProvider.selectedDate = appointmentDate;
-    bookingProvider.selectedTimeSlot = appointmentTime;
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ChangeNotifierProvider.value(
-          value: bookingProvider,
-          child: Builder(
-            builder: (context) => BookAppointmentScreen(
-              bookingProvider: Provider.of<BookingProvider>(
-                context,
-                listen: false,
-              ),
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
