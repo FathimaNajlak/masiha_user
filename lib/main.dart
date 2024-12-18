@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:masiha_user/consts/stripe_keys.dart';
 import 'package:masiha_user/firebase_options.dart';
+import 'package:masiha_user/models/doctor_details_model.dart';
 import 'package:masiha_user/providers/booking_provider.dart';
 import 'package:masiha_user/providers/doctor_details_provider.dart';
 import 'package:masiha_user/providers/doctor_provider.dart';
@@ -10,6 +11,7 @@ import 'package:masiha_user/providers/forgot_password_provider.dart';
 import 'package:masiha_user/providers/onboarding_provider.dart';
 import 'package:masiha_user/providers/user_details_provider.dart';
 import 'package:masiha_user/screens/add_details.dart';
+import 'package:masiha_user/screens/booking/payment_confirmation_screen.dart';
 import 'package:masiha_user/screens/home/favourites_screen.dart';
 import 'package:masiha_user/screens/home/home.dart';
 import 'package:masiha_user/screens/login_signup/all_set.dart';
@@ -65,6 +67,7 @@ class MyApp extends StatelessWidget {
         '/addDetails': (context) => const UserDetailsPage(),
         '/profile': (context) => const ProfileScreen(),
         '/favorite': (context) => const FavoriteDoctorsScreen(),
+        '/payment_confirmation': (context) => const PaymentConfirmationScreen(),
       },
       theme: ThemeData(
         primarySwatch: Colors.blue,
