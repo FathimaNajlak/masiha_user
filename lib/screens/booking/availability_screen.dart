@@ -335,3 +335,67 @@ class AvialabilityScreen extends StatelessWidget {
     );
   }
 }
+// import 'package:flutter/material.dart';
+// import 'package:masiha_user/models/doctor_details_model.dart';
+// import 'package:masiha_user/providers/booking_provider.dart';
+// import 'package:masiha_user/widgets/availability/book_appointment_button.dart';
+// import 'package:masiha_user/widgets/availability/date_picker_widget.dart';
+// import 'package:masiha_user/widgets/availability/patient_details_summary.dart';
+// import 'package:masiha_user/widgets/availability/time_slots_widget.dart';
+// import 'package:provider/provider.dart';
+
+// class AvialabilityScreen extends StatelessWidget {
+//   final DoctorDetailsModel doctor;
+
+//   const AvialabilityScreen({super.key, required this.doctor});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return ChangeNotifierProvider<BookingProvider>(
+//       create: (context) {
+//         final provider = BookingProvider(doctor);
+//         provider.loadDoctorAvailability(doctor.requestId!);
+//         return provider;
+//       },
+//       child: Scaffold(
+//         appBar: AppBar(
+//           title: const Text('Select Date and Time'),
+//           backgroundColor: Colors.transparent,
+//           elevation: 0,
+//         ),
+//         body: Consumer<BookingProvider>(
+//           builder: (context, provider, _) {
+//             if (provider.isLoading) {
+//               return const Center(child: CircularProgressIndicator());
+//             }
+
+//             if (provider.error != null) {
+//               return Center(
+//                 child: Column(
+//                   mainAxisAlignment: MainAxisAlignment.center,
+//                   children: [
+//                     Text('Error: ${provider.error}'),
+//                     ElevatedButton(
+//                       onPressed: () =>
+//                           provider.loadDoctorAvailability(doctor.requestId!),
+//                       child: const Text('Retry'),
+//                     ),
+//                   ],
+//                 ),
+//               );
+//             }
+
+//             return Column(
+//               children: [
+//                 DatePickerWidget(provider: provider),
+//                 TimeSlotsWidget(provider: provider),
+//                 PatientDetailsCard(provider: provider),
+//                 BookAppointmentButton(provider: provider),
+//               ],
+//             );
+//           },
+//         ),
+//       ),
+//     );
+//   }
+// }
