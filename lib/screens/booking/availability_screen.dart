@@ -14,106 +14,106 @@ class AvialabilityScreen extends StatelessWidget {
     required this.doctor,
   });
 
-  void _showPatientDetailsDialog(
+  void _showPatientDetailsBottomSheet(
       BuildContext context, BookingProvider provider) {
     final nameController = TextEditingController();
     final ageController = TextEditingController();
     final issueController = TextEditingController();
     final formKey = GlobalKey<FormState>();
+
     if (provider.patientDetails != null) {
       nameController.text = provider.patientDetails!.name;
       ageController.text = provider.patientDetails!.age.toString();
       issueController.text = provider.patientDetails!.issue;
     }
 
-    showDialog(
+    showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Patient Details'),
-          content: Form(
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            left: 16,
+            right: 16,
+            top: 16,
+          ),
+          child: Form(
             key: formKey,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextFormField(
-                    controller: nameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Patient Name',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter patient name';
-                      }
-                      return null;
-                    },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: nameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Patient Name',
+                    border: OutlineInputBorder(),
                   ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: ageController,
-                    decoration: const InputDecoration(
-                      labelText: 'Patient Age',
-                      border: OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter patient age';
-                      }
-                      final age = int.parse(value);
-                      if (age < 0 || age > 120) {
-                        return 'Please enter a valid age';
-                      }
-                      return null;
-                    },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter patient name';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: ageController,
+                  decoration: const InputDecoration(
+                    labelText: 'Patient Age',
+                    border: OutlineInputBorder(),
                   ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: issueController,
-                    decoration: const InputDecoration(
-                      labelText: 'Medical Issue',
-                      border: OutlineInputBorder(),
-                    ),
-                    maxLines: 3,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please describe the medical issue';
-                      }
-                      return null;
-                    },
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter patient age';
+                    }
+                    final age = int.parse(value);
+                    if (age < 0 || age > 120) {
+                      return 'Please enter a valid age';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: issueController,
+                  decoration: const InputDecoration(
+                    labelText: 'Medical Issue',
+                    border: OutlineInputBorder(),
                   ),
-                ],
-              ),
+                  maxLines: 3,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please describe the medical issue';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      // Save patient details
+                      final patientDetails = PatientDetails(
+                        name: nameController.text,
+                        age: int.parse(ageController.text),
+                        issue: issueController.text,
+                      );
+
+                      // Set patient details in provider
+                      provider.setPatientDetails(patientDetails);
+
+                      // Close bottom sheet
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  child: const Text('Save'),
+                ),
+              ],
             ),
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  // Save patient details
-                  final patientDetails = PatientDetails(
-                    name: nameController.text,
-                    age: int.parse(ageController.text),
-                    issue: issueController.text,
-                  );
-
-                  // Set patient details in provider
-                  provider.setPatientDetails(patientDetails);
-
-                  // Close dialog
-                  Navigator.of(context).pop();
-                }
-              },
-              child: const Text('Save'),
-            ),
-          ],
         );
       },
     );
@@ -274,7 +274,8 @@ class AvialabilityScreen extends StatelessWidget {
                       ),
                       TextButton.icon(
                         onPressed: () =>
-                            _showPatientDetailsDialog(context, provider),
+                            // _showPatientDetailsDialog(context, provider),
+                            _showPatientDetailsBottomSheet(context, provider),
                         icon: Icon(
                           provider.patientDetails != null
                               ? Icons.edit
@@ -303,7 +304,8 @@ class AvialabilityScreen extends StatelessWidget {
                         trailing: IconButton(
                           icon: const Icon(Icons.edit),
                           onPressed: () =>
-                              _showPatientDetailsDialog(context, provider),
+                              // _showPatientDetailsDialog(context, provider),
+                              _showPatientDetailsBottomSheet(context, provider),
                         ),
                       ),
                     ),
