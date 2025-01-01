@@ -92,7 +92,11 @@ class AvialabilityScreen extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 16),
-                ElevatedButton(
+                IconButton(
+                  icon: const Icon(
+                    Icons.save_alt_rounded,
+                    color: AppColors.darkcolor,
+                  ),
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       // Save patient details
@@ -109,7 +113,7 @@ class AvialabilityScreen extends StatelessWidget {
                       Navigator.of(context).pop();
                     }
                   },
-                  child: const Text('Save'),
+                  // child: const Icon(Icons.save_alt_rounded),
                 ),
               ],
             ),
@@ -301,12 +305,12 @@ class AvialabilityScreen extends StatelessWidget {
                         subtitle: Text(
                           'Age: ${provider.patientDetails!.age}, Issue: ${provider.patientDetails!.issue}',
                         ),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () =>
-                              // _showPatientDetailsDialog(context, provider),
-                              _showPatientDetailsBottomSheet(context, provider),
-                        ),
+                        // trailing: IconButton(
+                        //   icon: const Icon(Icons.edit),
+                        //   onPressed: () =>
+                        //       // _showPatientDetailsDialog(context, provider),
+                        //       _showPatientDetailsBottomSheet(context, provider),
+                        // ),
                       ),
                     ),
                   ),
@@ -337,3 +341,124 @@ class AvialabilityScreen extends StatelessWidget {
     );
   }
 }
+// import 'package:flutter/material.dart';
+// import 'package:masiha_user/widgets/availability/book_appointment_button.dart';
+// import 'package:masiha_user/widgets/availability/date_picker_widget.dart';
+// import 'package:masiha_user/widgets/availability/patient_details_bottom_sheet.dart';
+// import 'package:masiha_user/widgets/availability/time_slots_widget.dart';
+// import 'package:provider/provider.dart';
+// import 'package:masiha_user/consts/colors.dart';
+// import 'package:masiha_user/providers/booking_provider.dart';
+// import 'package:masiha_user/models/doctor_details_model.dart';
+
+// class AvialabilityScreen extends StatelessWidget {
+//   final DoctorDetailsModel doctor;
+
+//   const AvialabilityScreen({super.key, required this.doctor});
+
+//   void _showPatientDetailsBottomSheet(
+//       BuildContext context, BookingProvider provider) {
+//     showModalBottomSheet(
+//       context: context,
+//       isScrollControlled: true,
+//       builder: (context) => PatientDetailsBottomSheet(provider: provider),
+//     );
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return ChangeNotifierProvider(
+//       create: (_) =>
+//           BookingProvider(doctor)..loadDoctorAvailability(doctor.requestId!),
+//       child: Scaffold(
+//         appBar: AppBar(
+//           title: const Text('Select Date and Time'),
+//           backgroundColor: Colors.transparent,
+//           elevation: 0,
+//         ),
+//         body: Consumer<BookingProvider>(
+//           builder: (context, provider, _) {
+//             if (provider.isLoading) {
+//               return const Center(child: CircularProgressIndicator());
+//             }
+
+//             if (provider.error != null) {
+//               return Center(
+//                 child: Column(
+//                   mainAxisAlignment: MainAxisAlignment.center,
+//                   children: [
+//                     Text('Error: ${provider.error}'),
+//                     ElevatedButton(
+//                       onPressed: () =>
+//                           provider.loadDoctorAvailability(doctor.requestId!),
+//                       child: const Text('Retry'),
+//                     ),
+//                   ],
+//                 ),
+//               );
+//             }
+
+//             return Column(
+//               children: [
+//                 // Date Picker Widget
+//                 DatePickerWidget(provider: provider),
+
+//                 // Time Slots Widget
+//                 TimeSlotsWidget(provider: provider),
+
+//                 // Patient Details Section
+//                 Padding(
+//                   padding: const EdgeInsets.symmetric(
+//                       horizontal: 16.0, vertical: 8.0),
+//                   child: Row(
+//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                     children: [
+//                       const Text(
+//                         'Patient Details',
+//                         style: TextStyle(
+//                           fontSize: 16,
+//                           fontWeight: FontWeight.bold,
+//                         ),
+//                       ),
+//                       TextButton.icon(
+//                         onPressed: () =>
+//                             _showPatientDetailsBottomSheet(context, provider),
+//                         icon: Icon(
+//                           provider.patientDetails != null
+//                               ? Icons.edit
+//                               : Icons.add,
+//                           color: AppColors.darkcolor,
+//                         ),
+//                         label: Text(
+//                           provider.patientDetails != null
+//                               ? 'Edit Details'
+//                               : 'Add Details',
+//                           style: const TextStyle(color: AppColors.darkcolor),
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//                 if (provider.patientDetails != null)
+//                   Padding(
+//                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
+//                     child: Card(
+//                       child: ListTile(
+//                         title: Text(provider.patientDetails!.name),
+//                         subtitle: Text(
+//                           'Age: ${provider.patientDetails!.age}, Issue: ${provider.patientDetails!.issue}',
+//                         ),
+//                       ),
+//                     ),
+//                   ),
+
+//                 // Book Appointment Button
+//                 BookAppointmentButton(provider: provider),
+//               ],
+//             );
+//           },
+//         ),
+//       ),
+//     );
+//   }
+// }

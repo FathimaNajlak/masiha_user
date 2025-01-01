@@ -250,7 +250,7 @@ class BookingProvider with ChangeNotifier {
               doctor: doctor,
               appointmentDate: _selectedDate!,
               appointmentTime: _selectedTimeSlot!,
-              patientDetails: _patientDetails!, // Ensure this is passed
+              patientDetails: _patientDetails!,
             ),
           ),
         );
