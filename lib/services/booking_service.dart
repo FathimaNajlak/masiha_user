@@ -1,3 +1,6 @@
+import 'package:masiha_user/models/doctor_details_model.dart';
+import 'package:path/path.dart';
+
 import 'stripe_service.dart';
 
 class BookingService {
@@ -9,7 +12,7 @@ class BookingService {
     try {
       await _stripeService.makePayement();
     } catch (e) {
-      rethrow; // Re-throws error to handle at UI level
+      rethrow;
     }
   }
 }

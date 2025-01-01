@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:masiha_user/models/user_model.dart';
+import 'package:masiha_user/services/cloudinary_service.dart';
 import 'package:path/path.dart' as path;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,8 @@ import 'package:path_provider/path_provider.dart';
 class UserDetailsProvider extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final CloudinaryService _cloudinaryService = CloudinaryService();
+
   String? _currentUserDocId;
   final UserModel _user = UserModel();
   File? _imageFile;
@@ -151,17 +154,28 @@ class UserDetailsProvider extends ChangeNotifier {
     }
   }
 
-  Future<String> saveImageLocally(File imageFile) async {
+  Future<String> updateDoctorImage(File imageFile) async {
     try {
-      final directory = await getApplicationDocumentsDirectory();
-      final fileName =
-          'profile_${DateTime.now().millisecondsSinceEpoch}${path.extension(imageFile.path)}';
-      final savedImage = await imageFile.copy('${directory.path}/$fileName');
-      return savedImage.path;
+      final cloudinaryUrl =
+          await _cloudinaryService.uploadProfileImage(imageFile);
+      notifyListeners();
+      return cloudinaryUrl;
     } catch (e) {
-      throw Exception('Failed to save image locally');
+      print('Error uploading image: $e');
+      rethrow;
     }
   }
+  // Future<String> saveImageLocally(File imageFile) async {
+  //   try {
+  //     final directory = await getApplicationDocumentsDirectory();
+  //     final fileName =
+  //         'profile_${DateTime.now().millisecondsSinceEpoch}${path.extension(imageFile.path)}';
+  //     final savedImage = await imageFile.copy('${directory.path}/$fileName');
+  //     return savedImage.path;
+  //   } catch (e) {
+  //     throw Exception('Failed to save image locally');
+  //   }
+  // }
 
   // Main Validation and Save Method
   Future<bool> validateAndSave() async {
@@ -183,10 +197,10 @@ class UserDetailsProvider extends ChangeNotifier {
 
     try {
       if (_imageFile != null) {
-        final imageUrl = await saveImageLocally(_imageFile!);
-        _user.imagePath = imageUrl;
+        final imageUrl = await updateDoctorImage(_imageFile!);
+        // final imageUrl = await saveImageLocally(_imageFile!);
+        _user.imagePath = imageUrl; // Store the public URL
       }
-
       // Create user data with timestamp
       final userData = {
         ..._user.toJson(),

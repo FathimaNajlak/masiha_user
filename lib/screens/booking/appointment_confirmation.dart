@@ -49,7 +49,9 @@ class AppointmentConfirmationScreen extends StatelessWidget {
             CustomButton(
               text: 'Confirm Appointment',
               isLoading: false, // You can toggle this based on some state
-              onTap: () => _viewModel.confirmAppointment(context),
+              onTap: () => _viewModel.confirmAppointment(
+                context,
+              ),
               backgroundColor: AppColors.darkcolor,
               textColor: Colors.white,
               fontSize: 16,
