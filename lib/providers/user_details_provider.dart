@@ -33,49 +33,89 @@ class UserDetailsProvider extends ChangeNotifier {
   String? get imageError => _imageError;
   List<File> get certificateFiles => _certificateFiles;
 
+  // Future<void> fetchLatestUserDetails() async {
+  //   try {
+  //     // Get the currently logged-in user
+  //     User? currentUser = _auth.currentUser;
+
+  //     if (currentUser == null) {
+  //       print('No authenticated user found');
+  //       _currentUserDetails = null;
+  //       notifyListeners();
+  //       return;
+  //     }
+
+  //     // Fetch user document using the UID
+  //     DocumentSnapshot userDoc =
+  //         await _firestore.collection('users').doc(currentUser.uid).get();
+
+  //     if (userDoc.exists) {
+  //       // Convert Firestore document to UserModel
+  //       Map<String, dynamic>? userData =
+  //           userDoc.data() as Map<String, dynamic>?;
+
+  //       if (userData != null) {
+  //         _currentUserDetails = UserModel.fromJson({
+  //           ...userData,
+  //           'id': userDoc.id, // Add document ID to the data
+  //         });
+
+  //         notifyListeners();
+  //       } else {
+  //         print('User data is null');
+  //         _currentUserDetails = null;
+  //         notifyListeners();
+  //       }
+  //     } else {
+  //       print('No user document found');
+  //       _currentUserDetails = null;
+  //       notifyListeners();
+  //     }
+  //   } catch (e) {
+  //     print('Error fetching user details: $e');
+  //     _currentUserDetails = null;
+  //     notifyListeners();
+  //     rethrow;
+  //   }
+  // }
   Future<void> fetchLatestUserDetails() async {
     try {
-      // Get the currently logged-in user
-      User? currentUser = _auth.currentUser;
+      setLoadingState(true);
 
-      if (currentUser == null) {
-        print('No authenticated user found');
-        _currentUserDetails = null;
-        notifyListeners();
-        return;
-      }
+      if (_currentUserDocId != null) {
+        // Fetch specific document if ID is known
+        DocumentSnapshot doc =
+            await _firestore.collection('users').doc(_currentUserDocId).get();
 
-      // Fetch user document using the UID
-      DocumentSnapshot userDoc =
-          await _firestore.collection('users').doc(currentUser.uid).get();
-
-      if (userDoc.exists) {
-        // Convert Firestore document to UserModel
-        Map<String, dynamic>? userData =
-            userDoc.data() as Map<String, dynamic>?;
-
-        if (userData != null) {
+        if (doc.exists) {
           _currentUserDetails = UserModel.fromJson({
-            ...userData,
-            'id': userDoc.id, // Add document ID to the data
+            ...doc.data() as Map<String, dynamic>,
+            'id': doc.id,
           });
-
-          notifyListeners();
-        } else {
-          print('User data is null');
-          _currentUserDetails = null;
-          notifyListeners();
         }
       } else {
-        print('No user document found');
-        _currentUserDetails = null;
-        notifyListeners();
+        // Query for most recent user document
+        QuerySnapshot querySnapshot = await _firestore
+            .collection('users')
+            .orderBy('timestamp', descending: true)
+            .limit(1)
+            .get();
+
+        if (querySnapshot.docs.isNotEmpty) {
+          DocumentSnapshot latestDoc = querySnapshot.docs.first;
+          _currentUserDetails = UserModel.fromJson({
+            ...latestDoc.data() as Map<String, dynamic>,
+            'id': latestDoc.id,
+          });
+          _currentUserDocId = latestDoc.id;
+        }
       }
     } catch (e) {
       print('Error fetching user details: $e');
       _currentUserDetails = null;
+    } finally {
+      setLoadingState(false);
       notifyListeners();
-      rethrow;
     }
   }
 
