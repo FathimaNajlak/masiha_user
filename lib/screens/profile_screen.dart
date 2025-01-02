@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:masiha_user/consts/colors.dart';
 import 'package:masiha_user/providers/user_details_provider.dart';
+import 'package:masiha_user/screens/location_screen.dart';
+import 'package:masiha_user/widgets/profile_screen/help_screen.dart';
 import 'package:masiha_user/widgets/profile_screen/personal_details.dart';
+import 'package:masiha_user/widgets/profile_screen/settings_screen.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -48,10 +51,12 @@ class ProfileScreen extends StatelessWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const CircleAvatar(
+                        CircleAvatar(
                           radius: 60,
-                          backgroundImage:
-                              AssetImage('assets/images/profile.jpg'),
+                          backgroundImage: user.imagePath != null
+                              ? NetworkImage(user.imagePath!)
+                              : const AssetImage('assets/images/profile.jpg')
+                                  as ImageProvider,
                         ),
                         const SizedBox(height: 10),
                         Text(
@@ -86,20 +91,34 @@ class ProfileScreen extends StatelessWidget {
                   _buildProfileSection(
                     'Location',
                     onTap: () {
-                      // Navigate to location screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const LocationScreen()),
+                      );
                     },
                   ),
                   const SizedBox(height: 10),
                   _buildProfileSection(
                     'Settings',
                     onTap: () {
-                      // Navigate to settings screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SettingsScreen()),
+                      );
                     },
                   ),
                   const SizedBox(height: 10),
                   _buildProfileSection(
                     'Help',
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HelpScreen()),
+                      );
+                    },
                   ),
                   const SizedBox(height: 10),
                   _buildProfileSection(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:masiha_user/providers/doctor_provider.dart';
+import 'package:masiha_user/screens/profile_screen.dart';
 import 'package:masiha_user/widgets/home/bottom_nav_bar.dart';
 import 'package:masiha_user/screens/home/catogary.dart';
 import 'package:masiha_user/widgets/home/header.dart';
@@ -23,7 +24,17 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const UserHeader(),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ProfileScreen(),
+                      ),
+                    );
+                  },
+                  child: const UserHeader(),
+                ),
                 const SizedBox(height: 24),
                 const DoctorSearchBar(),
                 const SizedBox(height: 24),
