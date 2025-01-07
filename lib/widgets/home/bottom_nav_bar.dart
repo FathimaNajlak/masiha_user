@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:masiha_user/consts/colors.dart';
+import 'package:masiha_user/screens/my_appointments.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
   const CustomBottomNavBar({super.key});
@@ -10,7 +11,10 @@ class CustomBottomNavBar extends StatelessWidget {
         Navigator.pushNamed(context, '/home'); // Replace with your route
         break;
       case 1:
-        Navigator.pushNamed(context, '/schedule'); // Replace with your route
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const MyAppointmentsScreen()),
+        ); // Replace with your route
         break;
       case 2:
         Navigator.pushNamed(context, '/favorite'); // Replace with your route
