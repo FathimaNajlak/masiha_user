@@ -1,229 +1,104 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:masiha_user/models/doctor_details_model.dart';
+import 'package:masiha_user/providers/appointments_provider.dart';
+import 'package:masiha_user/providers/doctor_details_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
 
-class MyAppointmentsScreen extends StatefulWidget {
+class MyAppointmentsScreen extends StatelessWidget {
   const MyAppointmentsScreen({super.key});
 
   @override
-  State<MyAppointmentsScreen> createState() => _MyAppointmentsScreenState();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => AppointmentsProvider(),
+      child: const MyAppointmentsContent(),
+    );
+  }
 }
 
-class _MyAppointmentsScreenState extends State<MyAppointmentsScreen> {
-  bool _showUpcoming = true;
+class MyAppointmentsContent extends StatelessWidget {
+  const MyAppointmentsContent({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<AppointmentsProvider>();
+
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'My Appointments',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  _TabButton(
-                    title: 'Upcoming',
-                    isSelected: _showUpcoming,
-                    onTap: () => setState(() => _showUpcoming = true),
-                  ),
-                  const SizedBox(width: 20),
-                  _TabButton(
-                    title: 'Completed',
-                    isSelected: !_showUpcoming,
-                    onTap: () => setState(() => _showUpcoming = false),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Expanded(
-                child: _AppointmentsList(showUpcoming: _showUpcoming),
-              ),
-              _BottomNavigationBar(),
-            ],
+      appBar: AppBar(
+        title: const Text(
+          'My Appointments',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),
-    );
-  }
-}
-
-class _AppointmentsList extends StatelessWidget {
-  final bool showUpcoming;
-
-  const _AppointmentsList({required this.showUpcoming});
-
-  @override
-  Widget build(BuildContext context) {
-    final now = DateTime.now();
-
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection('appointments')
-          .where('userId',
-              isEqualTo: FirebaseAuth
-                  .instance.currentUser?.uid) // Replace with actual user ID
-          // .orderBy('appointmentDate')
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return const Center(child: Text('Something went wrong'));
-        }
-
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        final appointments = snapshot.data!.docs.where((doc) {
-          final appointmentDate =
-              DateFormat('yyyy-MM-dd').parse(doc['appointmentDate'] as String);
-          return showUpcoming
-              ? appointmentDate.isAfter(now)
-              : appointmentDate.isBefore(now);
-        }).toList();
-
-        if (appointments.isEmpty) {
-          return Center(
-            child: Text(
-              showUpcoming
-                  ? 'No upcoming appointments'
-                  : 'No completed appointments',
-            ),
-          );
-        }
-
-        return ListView.builder(
-          itemCount: appointments.length,
-          itemBuilder: (context, index) {
-            final appointment = appointments[index];
-            return _AppointmentCard(
-              doctorName: appointment['doctorName'] as String,
-              hospital: appointment['hospital'] as String,
-              specialty: appointment['specialty'] as String,
-              date: appointment['appointmentDate'] as String,
-              time: appointment['timeSlot'] as String,
-              isFavorite: appointment['isFavorite'] as bool? ?? false,
-            );
-          },
-        );
-      },
-    );
-  }
-}
-
-class _AppointmentCard extends StatelessWidget {
-  final String doctorName;
-  final String hospital;
-  final String specialty;
-  final String date;
-  final String time;
-  final bool isFavorite;
-
-  const _AppointmentCard({
-    required this.doctorName,
-    required this.hospital,
-    required this.specialty,
-    required this.date,
-    required this.time,
-    required this.isFavorite,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 16),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+      body: Column(
+        children: [
+          // Custom Tab Bar
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
               children: [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundColor: Colors.grey[200],
-                  child: Icon(Icons.person, size: 40, color: Colors.grey[400]),
-                ),
-                const SizedBox(width: 16),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            doctorName,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const Spacer(),
-                          Icon(
-                            isFavorite ? Icons.favorite : Icons.favorite_border,
-                            color: isFavorite ? Colors.red : Colors.grey,
-                          ),
-                        ],
-                      ),
-                      Text(
-                        '$specialty | $hospital',
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                          fontSize: 14,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        '$date at $time',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
+                  child: _TabButton(
+                    title: 'Upcoming',
+                    isSelected: provider.showUpcoming,
+                    onTap: () => provider.toggleView(true),
+                  ),
+                ),
+                Expanded(
+                  child: _TabButton(
+                    title: 'Completed',
+                    isSelected: !provider.showUpcoming,
+                    onTap: () => provider.toggleView(false),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () {
-                      // Handle cancel appointment
-                    },
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.blue,
+          ),
+          // Appointments List
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: provider.getAppointments(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
+
+                final appointments = snapshot.data?.docs ?? [];
+
+                if (appointments.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'No ${provider.showUpcoming ? 'upcoming' : 'completed'} appointments',
+                      style: const TextStyle(fontSize: 16, color: Colors.grey),
                     ),
-                    child: const Text('Cancel Appointment'),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Handle reschedule
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue[200],
-                    ),
-                    child: const Text('Reschedule'),
-                  ),
-                ),
-              ],
+                  );
+                }
+
+                return ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: appointments.length,
+                  itemBuilder: (context, index) {
+                    final appointment =
+                        appointments[index].data() as Map<String, dynamic>;
+                    return AppointmentCard(
+                      appointment: appointment,
+                      appointmentId: appointments[index].id,
+                      showActions: provider.showUpcoming,
+                    );
+                  },
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -235,6 +110,7 @@ class _TabButton extends StatelessWidget {
   final VoidCallback onTap;
 
   const _TabButton({
+    super.key,
     required this.title,
     required this.isSelected,
     required this.onTap,
@@ -249,58 +125,211 @@ class _TabButton extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
               color: isSelected ? Colors.blue : Colors.grey,
-              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
             ),
           ),
           const SizedBox(height: 4),
-          if (isSelected)
-            Container(
-              height: 2,
-              width: 60,
-              color: Colors.blue,
-            ),
+          Container(
+            height: 2,
+            color: isSelected ? Colors.blue : Colors.transparent,
+          ),
         ],
       ),
     );
   }
 }
 
-class _BottomNavigationBar extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 60,
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: Colors.grey[300]!)),
-      ),
-      child: const Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _BottomNavItem(icon: Icons.home, isSelected: false),
-          _BottomNavItem(icon: Icons.access_time, isSelected: true),
-          _BottomNavItem(icon: Icons.favorite_border, isSelected: false),
-          _BottomNavItem(icon: Icons.person_outline, isSelected: false),
-        ],
-      ),
-    );
-  }
-}
+class AppointmentCard extends StatelessWidget {
+  final Map<String, dynamic> appointment;
+  final String appointmentId;
+  final bool showActions;
 
-class _BottomNavItem extends StatelessWidget {
-  final IconData icon;
-  final bool isSelected;
-
-  const _BottomNavItem({
-    required this.icon,
-    required this.isSelected,
+  const AppointmentCard({
+    super.key,
+    required this.appointment,
+    required this.appointmentId,
+    this.showActions = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Icon(
-      icon,
-      color: isSelected ? Colors.blue : Colors.grey,
+    final provider = context.read<AppointmentsProvider>();
+
+    return Card(
+      margin: const EdgeInsets.only(bottom: 16),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Using FutureBuilder to fetch doctor's image
+                // FutureBuilder<Map<String, dynamic>?>(
+                //   future: context
+                //       .read<DoctorDetailsProvider>()
+                //       .getDoctorAdditionalDetails(
+                //         DoctorDetailsModel()
+                //           ..requestId = appointment['doctorRequestId'],
+                //       ),
+                //   builder: (context, snapshot) {
+                //     if (snapshot.connectionState == ConnectionState.waiting) {
+                //       return const CircleAvatar(
+                //         radius: 30,
+                //         child: CircularProgressIndicator(),
+                //       );
+                //     }
+
+                //     final doctorDetails = snapshot.data;
+                //     final imagePath = doctorDetails?['imagePath'] ??
+                //         appointment['doctorImage'];
+
+                //     return imagePath != null
+                //         ? CircleAvatar(
+                //             radius: 30,
+                //             backgroundImage: NetworkImage(imagePath),
+                //           )
+                //         : const CircleAvatar(
+                //             radius: 30,
+                //             child: Icon(Icons.person),
+                //           );
+                //   },
+                // ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Dr. ${appointment['doctorName']}',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const Icon(Icons.favorite_border),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.blue.shade50,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          provider.showUpcoming ? 'Upcoming' : 'Completed',
+                          style: TextStyle(
+                            color: Colors.blue.shade700,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${appointment['doctorSpecialization']} | ${appointment['hospitalName'] ?? 'Mims Hospital'}',
+                        style: TextStyle(
+                          color: Colors.grey.shade600,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            if (showActions) ...[
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => _handleCancel(context),
+                      style: OutlinedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: const Text('Cancel Appointment'),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () => _handleReschedule(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue.shade200,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: const Text('Reschedule'),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ],
+        ),
+      ),
     );
+  }
+
+  Future<void> _handleCancel(BuildContext context) async {
+    final provider = context.read<AppointmentsProvider>();
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Cancel Appointment'),
+        content:
+            const Text('Are you sure you want to cancel this appointment?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('No'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Yes'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      try {
+        await provider.cancelAppointment(appointmentId);
+
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Appointment cancelled successfully')),
+          );
+        }
+      } catch (e) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(e.toString())),
+          );
+        }
+      }
+    }
+  }
+
+  void _handleReschedule(BuildContext context) {
+    // Navigate to reschedule screen
+    // Implement your navigation logic here
   }
 }

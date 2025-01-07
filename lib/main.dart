@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:masiha_user/consts/stripe_keys.dart';
 import 'package:masiha_user/firebase_options.dart';
+import 'package:masiha_user/providers/appointments_provider.dart';
 
 import 'package:masiha_user/providers/doctor_details_provider.dart';
 import 'package:masiha_user/providers/doctor_provider.dart';
@@ -41,6 +42,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => DoctorProvider()),
         ChangeNotifierProvider(create: (_) => UserDetailsProvider()),
         ChangeNotifierProvider(create: (_) => DoctorDetailsProvider()),
+        ChangeNotifierProvider(create: (_) => AppointmentsProvider()),
       ],
       child: const MyApp(),
     ),

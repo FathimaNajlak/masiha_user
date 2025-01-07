@@ -29,22 +29,30 @@ class AppointmentViewModel extends ChangeNotifier {
     required String appointmentTime,
     required PatientDetails patientDetails,
   }) async {
+    String? paymentIntentId;
+    bool paymentSuccess = false;
+
     try {
       _isLoading = true;
       _error = null;
       notifyListeners();
 
       // 1. Process payment first
-      await _bookingService.makeAppointmentPayment(
+      final paymentResult = await _bookingService.makeAppointmentPayment(
         doctor: doctor,
       );
 
-      // 2. Create appointment record in Firestore
+      // Update payment status
+      paymentSuccess = true;
+
+      // 2. Create appointment record in Firestore with payment details
       final String appointmentId = await _createAppointmentRecord(
         doctor: doctor,
         appointmentDate: appointmentDate,
         appointmentTime: appointmentTime,
         patientDetails: patientDetails,
+        paymentIntentId: paymentIntentId,
+        paymentStatus: 'completed',
       );
 
       // 3. Show success message
@@ -62,9 +70,26 @@ class AppointmentViewModel extends ChangeNotifier {
             builder: (_) =>
                 const PaymentConfirmationScreen(), // Replace SuccessPage with your desired page
           ),
-        ); // or navigate to appointment details screen
+        );
       }
     } catch (e) {
+      // If payment was successful but storing failed, we should still store the record
+      if (paymentSuccess) {
+        try {
+          await _createAppointmentRecord(
+            doctor: doctor,
+            appointmentDate: appointmentDate,
+            appointmentTime: appointmentTime,
+            patientDetails: patientDetails,
+            paymentIntentId: paymentIntentId,
+            paymentStatus: 'completed',
+            isRetry: true,
+          );
+        } catch (storeError) {
+          print('Error storing appointment after payment: $storeError');
+        }
+      }
+
       _error = e.toString();
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -85,6 +110,9 @@ class AppointmentViewModel extends ChangeNotifier {
     required DateTime appointmentDate,
     required String appointmentTime,
     required PatientDetails patientDetails,
+    String? paymentIntentId,
+    required String paymentStatus,
+    bool isRetry = false,
   }) async {
     try {
       final userId = _auth.currentUser?.uid;
@@ -106,28 +134,44 @@ class AppointmentViewModel extends ChangeNotifier {
         'appointmentTime': appointmentTime,
         'consultationFee': doctor.consultationFees,
         'status': 'scheduled', // pending, completed, cancelled
+        // Payment related fields
+        'payment': {
+          'status': paymentStatus,
+          'amount': doctor.consultationFees,
+          'currency': 'INR',
+          'paymentIntentId': paymentIntentId,
+          'paymentMethod': 'stripe',
+          'timestamp': FieldValue.serverTimestamp(),
+        },
         'createdAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
+        'isRetry': isRetry, // Flag to indicate if this was a retry storage
       };
 
-      // Create the appointment document
-      await appointmentRef.set(appointmentData);
+      // Use a batch write to ensure all documents are created atomically
+      final batch = _firestore.batch();
 
-      // Also add to doctor's appointments collection
-      await _firestore
+      // Main appointments collection
+      batch.set(appointmentRef, appointmentData);
+
+      // Doctor's appointments subcollection
+      final doctorAppointmentRef = _firestore
           .collection('doctors')
           .doc(doctor.requestId)
           .collection('appointments')
-          .doc(appointmentRef.id)
-          .set(appointmentData);
+          .doc(appointmentRef.id);
+      batch.set(doctorAppointmentRef, appointmentData);
 
-      // Add to user's appointments collection
-      await _firestore
+      // User's appointments subcollection
+      final userAppointmentRef = _firestore
           .collection('users')
           .doc(userId)
           .collection('appointments')
-          .doc(appointmentRef.id)
-          .set(appointmentData);
+          .doc(appointmentRef.id);
+      batch.set(userAppointmentRef, appointmentData);
+
+      // Commit the batch
+      await batch.commit();
 
       return appointmentRef.id;
     } catch (e) {
