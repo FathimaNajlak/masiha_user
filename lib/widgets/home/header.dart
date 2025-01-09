@@ -66,14 +66,6 @@ class _UserHeaderState extends State<UserHeader> {
                   ),
                 ],
               ),
-              Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.notifications_outlined),
-                    onPressed: () {},
-                  ),
-                ],
-              ),
             ],
           ),
         );

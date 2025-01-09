@@ -79,6 +79,7 @@ class DoctorDetailsModel {
     this.consultationFees,
     this.imagePath,
     this.educations,
+    this.requestId,
   });
 
   Map<String, dynamic> toJson() {

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:masiha_user/models/doctor_details_model.dart';
 import 'package:masiha_user/providers/appointments_provider.dart';
 import 'package:masiha_user/providers/doctor_details_provider.dart';
+import 'package:masiha_user/screens/booking/availability_screen.dart';
+import 'package:masiha_user/widgets/home/bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -88,10 +91,25 @@ class MyAppointmentsContent extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final appointment =
                         appointments[index].data() as Map<String, dynamic>;
+
+                    // Fetch the associated doctor details.
+                    final doctor = DoctorDetailsModel(
+                      id: appointment['doctorId'],
+                      requestId: appointment['doctorId'], // Add requestId
+                      fullName: appointment['doctorName'],
+                      specialty: appointment['doctorSpecialization'],
+                      hospitalName:
+                          appointment['hospitalName'] ?? 'Mims Hospital',
+                      // Add other available fields from appointment data
+                      consultationFees:
+                          appointment['consultationFees']?.toDouble(),
+                    );
+
                     return AppointmentCard(
                       appointment: appointment,
                       appointmentId: appointments[index].id,
                       showActions: provider.showUpcoming,
+                      doctor: doctor, // Pass the doctor object here
                     );
                   },
                 );
@@ -100,6 +118,7 @@ class MyAppointmentsContent extends StatelessWidget {
           ),
         ],
       ),
+      bottomNavigationBar: const CustomBottomNavBar(),
     );
   }
 }
@@ -145,17 +164,26 @@ class AppointmentCard extends StatelessWidget {
   final Map<String, dynamic> appointment;
   final String appointmentId;
   final bool showActions;
+  final DoctorDetailsModel doctor;
 
   const AppointmentCard({
     super.key,
     required this.appointment,
     required this.appointmentId,
     this.showActions = true,
+    required this.doctor,
   });
 
   @override
   Widget build(BuildContext context) {
     final provider = context.read<AppointmentsProvider>();
+
+    // Convert Timestamp to DateTime and format it
+    final appointmentDate =
+        (appointment['appointmentDate'] as Timestamp).toDate();
+    final formattedDate = DateFormat('MMM dd, yyyy').format(appointmentDate);
+    final appointmentTime = appointment['appointmentTime'] ?? 'Not specified';
+    final patientName = appointment['patientName'] ?? 'Not specified';
 
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
@@ -170,37 +198,6 @@ class AppointmentCard extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Using FutureBuilder to fetch doctor's image
-                // FutureBuilder<Map<String, dynamic>?>(
-                //   future: context
-                //       .read<DoctorDetailsProvider>()
-                //       .getDoctorAdditionalDetails(
-                //         DoctorDetailsModel()
-                //           ..requestId = appointment['doctorRequestId'],
-                //       ),
-                //   builder: (context, snapshot) {
-                //     if (snapshot.connectionState == ConnectionState.waiting) {
-                //       return const CircleAvatar(
-                //         radius: 30,
-                //         child: CircularProgressIndicator(),
-                //       );
-                //     }
-
-                //     final doctorDetails = snapshot.data;
-                //     final imagePath = doctorDetails?['imagePath'] ??
-                //         appointment['doctorImage'];
-
-                //     return imagePath != null
-                //         ? CircleAvatar(
-                //             radius: 30,
-                //             backgroundImage: NetworkImage(imagePath),
-                //           )
-                //         : const CircleAvatar(
-                //             radius: 30,
-                //             child: Icon(Icons.person),
-                //           );
-                //   },
-                // ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
@@ -216,7 +213,6 @@ class AppointmentCard extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const Icon(Icons.favorite_border),
                         ],
                       ),
                       const SizedBox(height: 4),
@@ -244,6 +240,57 @@ class AppointmentCard extends StatelessWidget {
                           color: Colors.grey.shade600,
                           fontSize: 14,
                         ),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.person,
+                            size: 16,
+                            color: Colors.grey.shade600,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            'Patient: $patientName',
+                            style: TextStyle(
+                              color: Colors.grey.shade600,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      // Add Date and Time
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.calendar_today,
+                            size: 16,
+                            color: Colors.grey.shade600,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            formattedDate,
+                            style: TextStyle(
+                              color: Colors.grey.shade600,
+                              fontSize: 14,
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Icon(
+                            Icons.access_time,
+                            size: 16,
+                            color: Colors.grey.shade600,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            appointmentTime,
+                            style: TextStyle(
+                              color: Colors.grey.shade600,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -329,7 +376,10 @@ class AppointmentCard extends StatelessWidget {
   }
 
   void _handleReschedule(BuildContext context) {
-    // Navigate to reschedule screen
-    // Implement your navigation logic here
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => AvialabilityScreen(doctor: doctor)),
+    );
   }
 }

@@ -3,14 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:masiha_user/consts/colors.dart';
 import 'package:masiha_user/providers/user_details_provider.dart';
-import 'package:masiha_user/screens/location_screen.dart';
 import 'package:masiha_user/widgets/profile_screen/help_screen.dart';
-import 'package:masiha_user/widgets/profile_screen/personal_details.dart';
-import 'package:masiha_user/widgets/profile_screen/settings_screen.dart';
+import 'package:masiha_user/widgets/profile_screen/edit_details.dart';
+import 'package:masiha_user/widgets/profile_screen/settings/settings_screen.dart';
 import 'package:provider/provider.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+class UserProfileScreen extends StatelessWidget {
+  const UserProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,90 +38,94 @@ class ProfileScreen extends StatelessWidget {
           }
 
           return Scaffold(
+            backgroundColor: Colors.white,
             appBar: AppBar(
-              title: const Text('Profile'),
+              backgroundColor: Colors.white,
+              elevation: 0,
+              title: const Text(
+                'Profile',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              centerTitle: true,
             ),
-            body: Padding(
-              padding: const EdgeInsets.all(24.0),
+            body: SingleChildScrollView(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const SizedBox(height: 20),
+                  // Profile Image
                   Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        CircleAvatar(
-                          radius: 60,
-                          backgroundImage: user.imagePath != null
-                              ? NetworkImage(user.imagePath!)
-                              : const AssetImage('assets/images/profile.jpg')
-                                  as ImageProvider,
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          '${user.fullName}',
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          '${user.age} years old',
-                          style:
-                              TextStyle(fontSize: 18, color: Colors.grey[600]),
-                        ),
-                      ],
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage: user.imagePath != null
+                          ? NetworkImage(user.imagePath!)
+                          : const AssetImage('assets/images/profile.jpg')
+                              as ImageProvider,
                     ),
                   ),
+                  const SizedBox(height: 16),
+                  // User Name
+                  Text(
+                    user.fullName ?? 'User',
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    '${user.age} years old',
+                    style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                  ),
                   const SizedBox(height: 24),
-                  _buildProfileSection(
-                    'Personal Details',
+                  // Menu Items
+                  _buildMenuItem(
+                    icon: Icons.person_outline,
+                    title: 'Personal Details',
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                const PersonalDetailsScreen()),
+                          builder: (context) => const EditUserScreen(),
+                        ),
                       );
                     },
                   ),
-                  const SizedBox(height: 10),
-                  _buildProfileSection(
-                    'Location',
+                  const SizedBox(height: 8),
+
+                  _buildMenuItem(
+                    icon: Icons.settings_outlined,
+                    title: 'Settings',
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const LocationScreen()),
+                          builder: (context) => const SettingsScreen(),
+                        ),
                       );
                     },
                   ),
-                  const SizedBox(height: 10),
-                  _buildProfileSection(
-                    'Settings',
+                  const SizedBox(height: 8),
+
+                  _buildMenuItem(
+                    icon: Icons.help_outline,
+                    title: 'Help',
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const SettingsScreen()),
+                          builder: (context) => const HelpScreen(),
+                        ),
                       );
                     },
                   ),
-                  const SizedBox(height: 10),
-                  _buildProfileSection(
-                    'Help',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const HelpScreen()),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  _buildProfileSection(
-                    'Logout',
+                  const SizedBox(height: 8),
+
+                  _buildMenuItem(
+                    icon: Icons.logout,
+                    title: 'Logout',
                     onTap: () => _showLogoutDialog(context),
                   ),
                 ],
@@ -134,39 +137,37 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileSection(
-    String title, {
+  Widget _buildMenuItem({
+    required IconData icon,
+    required String title,
     required VoidCallback onTap,
   }) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+    return ListTile(
+      leading: Container(
+        padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.cardBackground,
           borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const Icon(Icons.arrow_forward_ios, size: 18, color: Colors.grey),
-          ],
+        child: Icon(
+          icon,
+          color: AppColors.darkcolor,
+          size: 24,
         ),
       ),
+      title: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      trailing: const Icon(
+        Icons.arrow_forward_ios,
+        size: 16,
+        color: Colors.grey,
+      ),
+      onTap: onTap,
     );
   }
 
