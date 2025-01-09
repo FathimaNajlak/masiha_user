@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:masiha_user/widgets/profile_screen/settings/privacy_policy.dart';
+import 'package:masiha_user/widgets/profile_screen/settings/terms_and_conditions.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -21,32 +23,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: Column(
           children: [
             _buildSettingsTile(
-              title: 'Notifications',
-              trailing: Switch(
-                value: notificationsEnabled,
-                onChanged: (value) =>
-                    setState(() => notificationsEnabled = value),
-              ),
-            ),
-            _buildSettingsTile(
-              title: 'Dark Mode',
-              trailing: Switch(
-                value: darkModeEnabled,
-                onChanged: (value) => setState(() => darkModeEnabled = value),
-              ),
-            ),
-            _buildSettingsTile(
-              title: 'Language',
-              subtitle: selectedLanguage,
-              onTap: _showLanguageDialog,
-            ),
-            _buildSettingsTile(
               title: 'Privacy Policy',
-              onTap: () {/* Navigate to privacy policy */},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          const PrivacyPolicyPage(isDoctor: false)),
+                );
+              },
             ),
             _buildSettingsTile(
               title: 'Terms of Service',
-              onTap: () {/* Navigate to terms */},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          const TermsAndConditionsPage(isDoctor: false)),
+                );
+              },
             ),
             _buildSettingsTile(
               title: 'App Version',

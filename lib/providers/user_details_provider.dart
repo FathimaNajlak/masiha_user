@@ -33,51 +33,6 @@ class UserDetailsProvider extends ChangeNotifier {
   String? get imageError => _imageError;
   List<File> get certificateFiles => _certificateFiles;
 
-  // Future<void> fetchLatestUserDetails() async {
-  //   try {
-  //     // Get the currently logged-in user
-  //     User? currentUser = _auth.currentUser;
-
-  //     if (currentUser == null) {
-  //       print('No authenticated user found');
-  //       _currentUserDetails = null;
-  //       notifyListeners();
-  //       return;
-  //     }
-
-  //     // Fetch user document using the UID
-  //     DocumentSnapshot userDoc =
-  //         await _firestore.collection('users').doc(currentUser.uid).get();
-
-  //     if (userDoc.exists) {
-  //       // Convert Firestore document to UserModel
-  //       Map<String, dynamic>? userData =
-  //           userDoc.data() as Map<String, dynamic>?;
-
-  //       if (userData != null) {
-  //         _currentUserDetails = UserModel.fromJson({
-  //           ...userData,
-  //           'id': userDoc.id, // Add document ID to the data
-  //         });
-
-  //         notifyListeners();
-  //       } else {
-  //         print('User data is null');
-  //         _currentUserDetails = null;
-  //         notifyListeners();
-  //       }
-  //     } else {
-  //       print('No user document found');
-  //       _currentUserDetails = null;
-  //       notifyListeners();
-  //     }
-  //   } catch (e) {
-  //     print('Error fetching user details: $e');
-  //     _currentUserDetails = null;
-  //     notifyListeners();
-  //     rethrow;
-  //   }
-  // }
   Future<void> fetchLatestUserDetails() async {
     try {
       setLoadingState(true);
